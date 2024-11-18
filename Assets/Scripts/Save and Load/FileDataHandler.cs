@@ -151,7 +151,7 @@ public class FileDataHandler
                     }
                 }
 
-                //如果需要解密，调用解密方法
+                //解密方法
                 if (encryptData)
                 {
                     dataToLoad = EncryptAndDecrypt(dataToLoad);
