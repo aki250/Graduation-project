@@ -12,7 +12,7 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     [SerializeField] private List<string> boundBehaveNameList;
 
     //英文描述部分
-    [Header("English")]
+    [Header("英文")]
     //技能名称英文
     [SerializeField] private string skillName;
     //技能描述英文
@@ -20,7 +20,7 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     [SerializeField] private string skillDescription;
 
     //中文描述部分
-    [Header("Chinese")]
+    [Header("中文")]
     //技能名称中文
     [SerializeField] private string skillName_Chinese;
     //技能描述中文

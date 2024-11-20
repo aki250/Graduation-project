@@ -44,7 +44,7 @@ public class PlayerAnimationTrigger : MonoBehaviour
     //空中发射攻击触发器，用于发起空中攻击并将敌人击飞
     private void AirLaunchAttackTrigger()
     {
-        //释放剑的奥术效果，检查是否可以重新释放（考虑冷却时间）
+        //释放剑的奥术效果，检查是否可以重新释放
         Inventory.instance.ReleaseSwordArcane_ConsiderCooldown();
 
         //获取玩家攻击范围内的所有碰撞器（可能是敌人）
@@ -59,7 +59,7 @@ public class PlayerAnimationTrigger : MonoBehaviour
                 //获取敌人并暂时修改其击退运动，使其被击飞
                 Enemy _enemy = hit.GetComponent<Enemy>();
                 Vector2 originalKnockbackMovement = _enemy.knockbackMovement;
-                _enemy.knockbackMovement = new Vector2(0, 17); // 设置敌人向上的击退
+                _enemy.knockbackMovement = new Vector2(0, 17); //设置敌人被升天
 
                 //获取敌人的统计数据并造成伤害
                 EnemyStats _target = hit.GetComponent<EnemyStats>();
@@ -71,7 +71,7 @@ public class PlayerAnimationTrigger : MonoBehaviour
                 //恢复敌人的击退运动状态
                 _enemy.knockbackMovement = originalKnockbackMovement;
 
-                //使用剑的效果，考虑冷却时间
+                //使用剑的效果
                 Inventory.instance.UseSwordEffect_ConsiderCooldown(_target.transform);
             }
         }

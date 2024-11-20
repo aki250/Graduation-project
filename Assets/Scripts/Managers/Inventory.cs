@@ -21,7 +21,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
 
     public List<ItemData> startItems;   //初始物品
 
-    [Header("Inventory UI")]
+    [Header("物品UI")]
     [SerializeField] private Transform referenceInventory;  //物品栏UI
     [SerializeField] private Transform referenceStash;  //材料的UI
     [SerializeField] private Transform referenceEquippedEquipments; //装备栏UI
@@ -36,7 +36,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
     //private bool flaskUsed = false;
 
 
-    [Header("Item Data Base")]
+    [Header("物品数据库")]
     public List<ItemData> itemDataBase; //物品数据基础库
     public List<InventorySlot> loadedInventorySlots;    //加载物品栏数据
     public List<ItemData_Equipment> loadedEquippedEquipment;    //加载装备数据
@@ -107,7 +107,6 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
 
     private void Update()
     {
-        //这里可以添加任何周期性更新的逻辑
         //if (Input.GetKeyDown(KeyCode.L))
         //{
         //    ItemData _itemToRemove = inventorySlotList[inventorySlotList.Count - 1].item;
@@ -161,8 +160,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
             }
         }
 
-        //更新角色面板的统计信息
-        UpdateStatUI();
+        UpdateStatUI();     //更新角色面板的统计信息
 
     }
 
@@ -202,8 +200,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
             //卸下旧装备并移除其相关数据
             UnequipEquipmentWithoutAddingBackToInventory(_oldEquippedEquipment);
 
-            //将卸下的旧装备重新添加回背包
-            AddItem(_oldEquippedEquipment);
+            AddItem(_oldEquippedEquipment); //脱下的装备放回背包
         }
 
         //将新的装备槽添加到已装备的装备槽列表中
@@ -215,10 +212,8 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
         //为新装备应用其附加的属性或修饰符
         _newEquipmentToEquip.AddModifiers();
 
-        //从背包中移除新装备
-        RemoveItem(_newEquipmentToEquip);
+        RemoveItem(_newEquipmentToEquip);   //从背包中移除新装备
 
-        //更新UI，确保显示最新的装备状态 (此行被注释掉)
         //UpdateInventoryAndStashUI();
 
         //如果新装备是药水瓶（Flask），则更新UI显示药水的图标
@@ -255,7 +250,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
     //检查背包空间
     public bool CanAddEquipmentToInventory()
     {
-        //如果背包中的物品槽数已经满了（即达到最大容量）
+        //如果背包中的物品槽数满
         if (inventorySlotList.Count >= inventorySlotUI.Length)
         {
             Debug.Log("No more space in inventory");  //输出背包空间已满的提示
@@ -266,7 +261,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
         return true;
     }
 
-    //添加物品到背包或库存中
+    //添加物品到背包
     public void AddItem(ItemData _item)
     {
         //如果物品是装备且背包有空间，则将装备添加到背包
@@ -307,7 +302,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
     public void RemoveItem(ItemData _item)
     {
         //从背包中查找物品
-        if (inventorySlotDictionary.TryGetValue(_item, out InventorySlot value))
+        if (inventorySlotDictionary.TryGetValue(_item, out InventorySlot value))        //out 
         {
             //物品<=1，背包列表和字典中移除该物品
             if (value.stackSize <= 1)
@@ -336,7 +331,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
             }
         }
 
-        // 更新所有物品槽的 UI 显示
+        // 更新所有物品槽的UI显示
         UpdateAllSlotUI();
     }
 
@@ -515,7 +510,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
         //加载背包数据（itemID 和 stackSize）
         foreach (var pair in _data.inventory)
         {
-            // 遍历所有的物品数据，查找与存档中的 itemID 匹配的物品
+            //遍历所有的物品数据，查找存档中的itemID匹配的物品
             foreach (var item in itemDataBase)
             {
                 // 如果物品存在，并且 itemID 匹配
@@ -531,57 +526,57 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
             }
         }
 
-        // 加载已装备的装备数据
+        //加载已装备的装备数据
         foreach (var equipmentID in _data.equippedEquipmentIDs)
         {
-            // 遍历所有物品数据，查找与存档中的装备 ID 匹配的装备
+            //遍历所有物品数据，查找与存档中的装备 ID 匹配的装备
             foreach (var equipment in itemDataBase)
             {
-                // 如果物品存在，并且 itemID 匹配
+                //如果物品存在，itemID匹配
                 if (equipment != null && equipment.itemID == equipmentID)
                 {
-                    // 将装备物品添加到已加载的装备列表中
+                    //装备物品添加到已加载的装备列表中
                     loadedEquippedEquipment.Add(equipment as ItemData_Equipment);
                 }
             }
         }
     }
 
-    // 保存游戏数据
+    //保存游戏数据
     public void SaveData(ref GameData _data)
     {
-        // 清空已有的背包数据，防止每次加载游戏时背包数据重复
+        //清空已有的背包数据，防止每次加载游戏时背包数据重复
         _data.inventory.Clear();
         _data.equippedEquipmentIDs.Clear();
 
-        // 将当前背包中的物品数据保存到游戏数据中
+        //将当前背包中的物品数据保存到游戏数据中
         foreach (KeyValuePair<ItemData, InventorySlot> search in inventorySlotDictionary)
         {
-            // 保存物品的 itemID 和堆叠数量
+            //保存物品的itemID和数量
             _data.inventory.Add(search.Key.itemID, search.Value.stackSize);
         }
 
-        // 将当前储藏室中的物品数据保存到游戏数据中
+        //将当前储藏室中的物品数据保存到游戏数据中
         foreach (var search in stashSlotDictionary)
         {
-            // 保存物品的 itemID 和堆叠数量
+            //保存物品的itemID和堆叠数量
             _data.inventory.Add(search.Key.itemID, search.Value.stackSize);
         }
 
-        // 将当前已装备的装备数据保存到游戏数据中
+        //将当前已装备的装备数据保存到游戏数据中
         foreach (var search in equippedEquipmentSlotDictionary)
         {
-            // 保存装备物品的 itemID
+            //保存装备物品itemID
             _data.equippedEquipmentIDs.Add(search.Key.itemID);
         }
     }
 
 #if UNITY_EDITOR
-    // 编辑器模式下的菜单项，用于填充物品数据库
+    //编辑器模式下的菜单项，用于填充物品数据库
     [ContextMenu("Fill up item data base")]
     private void FillUpItemDataBase()
     {
-        // 获取所有物品数据并填充到数据库中
+        //获取所有物品数据并填充到数据库中
         itemDataBase = GetItemDataBase();
     }
 
@@ -594,18 +589,18 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
         // AssetDatabase.FindAssets 用于查找指定路径下的所有资源，返回的是 GUID 数组
         string[] assetNames = AssetDatabase.FindAssets("", new string[] { "Assets/ItemData/Items" });
 
-        // 遍历所有的资产名称
+        //遍历资产名称
         foreach (string SOName in assetNames)
         {
-            // 获取该物品的路径
+            //获取该物品路径
             var SOPath = AssetDatabase.GUIDToAssetPath(SOName);
-            // 加载该路径下的物品数据
+            //加载路径下的物品数据
             var itemData = AssetDatabase.LoadAssetAtPath<ItemData>(SOPath);
-            // 将加载的物品数据添加到物品数据库中
+            //加载物品数据添加到物品数据库中
             itemDataBase.Add(itemData);
         }
 
-        // 返回填充好的物品数据列表
+        //返回填充好的物品数据列表
         return itemDataBase;
     }
 #endif

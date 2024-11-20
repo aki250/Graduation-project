@@ -2,60 +2,57 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-
 //定义各种角色属性类型的枚举
 public enum StatType
 {
-    strength,       //力量（增加伤害和暴击力量）
-    agility,        //敏捷（增加闪避和暴击概率）
+    strength,   //力量（增加伤害和暴击力量）
+    agility,    //敏捷（增加闪避和暴击概率）
     intelligence,   //智力（增加魔法伤害和魔法抗性）
-    vitality,       //体力（增加最大HP）
-    damage,         //物理伤害
-    critChance,     //暴击几率
-    critPower,      //暴击伤害
-    maxHP,          //最大HP
-    armor,          //护甲
-    evasion,        //闪避
-    magicResistance,//魔法抗性
-    fireDamage,     //火焰伤害
-    iceDamage,      //冰霜伤害
+    vitality,   //体力（增加最大HP）
+    damage, //物伤
+    critChance, //暴击率
+    critPower,  //暴伤
+    maxHP,  //最大HP
+    armor,  //护甲
+    evasion,    //闪避
+    magicResistance,    //魔法抗性
+    fireDamage, //火焰伤害
+    iceDamage,  //冰霜伤害
     lightningDamage //雷电伤害
 }
 
 //角色的各种状态和属性
 public class CharacterStats : MonoBehaviour
 {
-    [Header("Major Stats")]
-    public Stat strength;      //力量：增加伤害 +1，暴击伤害 +1%
-    public Stat agility;       //敏捷：增加闪避 +1%，暴击几率 +1%
-    public Stat intelligence;  //智力：增加魔法伤害 +1，魔法抗性 +3
-    public Stat vitality;      //体力：增加最大HP +5
+    [Header("主属性")]
+    public Stat strength;   //力量：增加伤害 +1，暴击伤害 +1%
+    public Stat agility;    //敏捷：增加闪避 +1%，暴击几率 +1%
+    public Stat intelligence;   //智力：增加魔法伤害 +1，魔法抗性 +3
+    public Stat vitality;   //体力：增加最大HP +5
+    public Stat maxHP;  //最大HP
+    public Stat armor;  //护甲
+    public Stat evasion;    //闪避
+    public Stat magicResistance;    //魔法抗性
 
-    [Header("Defensive Stats")]
-    public Stat maxHP;         //最大HP
-    public Stat armor;         //护甲
-    public Stat evasion;       //闪避
-    public Stat magicResistance;//魔法抗性
-
-    [Header("Offensive Stats")]
+    [Header("物伤")]
     public Stat damage;        // 物理伤害
     public Stat critChance;    // 暴击几率
     public Stat critPower;     // 暴击伤害（默认150%）
 
-    [Header("Magic Stats")]
+    [Header("法伤")]
     public Stat fireDamage;    //火焰伤害
     public Stat iceDamage;     //冰霜伤害
     public Stat lightningDamage;//雷电伤害
 
-    [Header("Ailments Info")]
-    public bool isIgnited;      //是否被点燃（持续伤害）
-    public bool isChilled;      //是否被冰冻（护甲 -20%）
-    public bool isShocked;      //是否被雷击（准确度 -20%，敌人闪避 +20%）
+    [Header("元素伤")]
+    public bool isIgnited;  //是否被点燃（持续伤害）
+    public bool isChilled;  //是否被冰冻（护甲 -20%）
+    public bool isShocked;  //是否被雷击（准确度 -20%，敌人闪避 +20%）
     public Stat igniteDuration; //点燃持续时间
     public Stat chillDuration;  //冰冻持续时间
     public Stat shockDuration;  //雷击持续时间
-    [SerializeField] private GameObject thunderStrikePrefab; //雷击特效
-    private int thunderStrikeDamage; //雷击伤害
+    [SerializeField] private GameObject thunderStrikePrefab;    //雷击特效
+    private int thunderStrikeDamage;    //雷击伤害
 
     //是否处于无敌状态
     public bool isInvincible { get; private set; }
@@ -106,32 +103,32 @@ public class CharacterStats : MonoBehaviour
 
     protected virtual void Update()
     {
-        // 更新状态异常的定时器
+        //更新状态异常的定时器
         ignitedAilmentTimer -= Time.deltaTime;
         chilledAilmentTimer -= Time.deltaTime;
         shockedAilmentTimer -= Time.deltaTime;
 
         ignitedDamageTimer -= Time.deltaTime;
 
-        // 如果点燃定时器过期，移除点燃效果
+        //如果点燃定时器过期，移除点燃效果
         if (ignitedAilmentTimer < 0)
         {
             isIgnited = false;
         }
 
-        // 如果冰冻定时器过期，移除冰冻效果
+        //如果冰冻定时器过期，移除冰冻效果
         if (chilledAilmentTimer < 0)
         {
             isChilled = false;
         }
 
-        // 如果震惊定时器过期，移除震惊效果
+        //如果震惊定时器过期，移除震惊效果
         if (shockedAilmentTimer < 0)
         {
             isShocked = false;
         }
 
-        // 如果角色被点燃，则处理点燃伤害
+        //如果角色被点燃，则处理点燃伤害
         if (isIgnited)
         {
             DealIgniteDamage(); // 执行点燃伤害
@@ -141,55 +138,55 @@ public class CharacterStats : MonoBehaviour
 
     public virtual void DoDamge(CharacterStats _targetStats)
     {
-        // 如果目标是无敌状态，无法受到伤害
+        //如果目标是无敌状态，无法受到伤害
         if (_targetStats.isInvincible)
         {
             return;
         }
 
-        // 检查目标是否能够闪避这次攻击
+        //检查目标是否能够闪避这次攻击
         if (TargetCanEvadeThisAttack(_targetStats))
         {
             return;
         }
 
-        // 计算基础伤害，包含角色的物理伤害和力量加成
+        //计算基础伤害，包含角色的物理伤害和力量加成
         int _totalDamage = damage.GetValue() + strength.GetValue();
 
-        // 判断是否触发暴击
+        //判断是否触发暴击
         bool crit = CanCrit();
 
         if (crit)
         {
-            Debug.Log("Critical Attack!"); // 打印暴击日志
-            _totalDamage = CalculatCritDamage(_totalDamage); // 计算暴击伤害
+            Debug.Log("Critical Attack!"); //打印暴击日志
+            _totalDamage = CalculatCritDamage(_totalDamage); //计算暴击伤害
         }
 
-        // 创建击中特效，传递目标和是否暴击的状态
+        //创建击中特效，传递目标和是否暴击的状态
         fx.CreateHitFX(_targetStats.transform, crit);
 
-        // 计算目标护甲对伤害的减免
+        //计算目标护甲对伤害的减免
         _totalDamage = CheckTargetArmor(_targetStats, _totalDamage);
 
-        // 检查目标是否处于脆弱状态，增加伤害
+        //检查目标是否处于脆弱状态，增加伤害
         _totalDamage = CheckTargetVulnerability(_targetStats, _totalDamage);
 
-        // 让目标承受伤害，并传递必要的参数（伤害值、攻击者、目标、是否暴击）
+        //让目标承受伤害，并传递必要的参数（伤害值、攻击者、目标、是否暴击）
         _targetStats.TakeDamage(_totalDamage, transform, _targetStats.transform, crit);
 
-        // 这里可能会调用魔法伤害相关函数，但当前被注释掉
-        // DoMagicDamage(_targetStats, transform);
+        //魔法伤害相关函数
+        //DoMagicDamage(_targetStats, transform);
     }
 
     public virtual void TakeDamage(int _damage, Transform _attacker, Transform _attackee, bool _isCrit)
     {
-        // 如果角色是无敌状态，则不受伤害
+        //如果角色是无敌状态，则不受伤害
         if (isInvincible)
         {
             return;
         }
 
-        // 扣除伤害，判断是否为暴击
+        //扣除伤害，判断是否为暴击
         DecreaseHPBy(_damage, _isCrit);
 
         // 为目标角色创建伤害反馈效果（如闪光、击退等）
@@ -199,7 +196,7 @@ public class CharacterStats : MonoBehaviour
         // 如果当前HP小于等于0，并且角色还没有死亡，则执行死亡逻辑
         if (currentHP <= 0 && !isDead)
         {
-            Die(); // 角色死亡
+            Die();
         }
     }
 
@@ -210,7 +207,7 @@ public class CharacterStats : MonoBehaviour
         {
             return;
         }
-        //标记角色为死亡状态，并打印死亡日志
+
         isDead = true;
         Debug.Log($"{gameObject.name} is Dead");
     }
@@ -223,12 +220,12 @@ public class CharacterStats : MonoBehaviour
             return;
         }
 
-        // 将角色血量设置为0，触发血量变化事件
+        //角色血量设置为0，触发血量变化事件
         currentHP = 0;
 
         if (onHealthChanged != null)
         {
-            onHealthChanged(); // 通知血量变化
+            onHealthChanged(); //通知血量变化
         }
 
         // 执行死亡逻辑
@@ -251,12 +248,14 @@ public class CharacterStats : MonoBehaviour
 
         //计算总魔法伤害
         int _totalMagicDamage = _fireDamage + _iceDamage + _lightningDamage + intelligence.GetValue();
-        _totalMagicDamage = CheckTargetMagicResistance(_targetStats, _totalMagicDamage);        //计算目标的魔法抗性
+
+        //计算目标的魔法抗性
+        _totalMagicDamage = CheckTargetMagicResistance(_targetStats, _totalMagicDamage);       
 
         //对目标造成魔法伤害
         _targetStats.TakeDamage(_totalMagicDamage, _attacker, _targetStats.transform, false);
 
-        // 如果至少有一种魔法伤害大于0，则可以应用状态异常
+        //如果至少有一种魔法伤害大于0，则可以应用状态异常
         if (Mathf.Max(_fireDamage, _iceDamage, _lightningDamage) <= 0)
         {
             return;
@@ -569,7 +568,7 @@ public class CharacterStats : MonoBehaviour
         {
             GameObject popUpText = fx.CreatePopUpText(_takenDamage.ToString());
 
-            // 如果是暴击，显示特殊的暴击文本效果
+            //如果是暴击，显示特殊的暴击文本效果
             if (_isCrit)
             {
                 popUpText.GetComponent<TextMeshPro>().color = Color.yellow;
@@ -669,7 +668,7 @@ public class CharacterStats : MonoBehaviour
 
     #region Get Final Stat Value
 
-    //获取最大HP值，基础最大HP + 体力 * 5
+    //获取最大HP值
     public int getMaxHP()
     {
         return maxHP.GetValue() + vitality.GetValue() * 5;

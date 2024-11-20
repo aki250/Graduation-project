@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-                                                                                //敌人的状态
+                                          //敌人的状态
 public class EnemyStats : CharacterStats
 {
     private Enemy enemy; //敌人组件
@@ -9,7 +9,7 @@ public class EnemyStats : CharacterStats
 
     public Stat currencyDropAmount; //敌人死亡时掉落的货币数量
 
-    [Header("Enemy Level Info")]
+    [Header("敌人等级")]
     [SerializeField] private int enemyLevel = 1; //敌人等级
 
     [Range(0f, 1f)]
@@ -76,7 +76,7 @@ public class EnemyStats : CharacterStats
     //根据敌人等级调整所有属性
     private void ModifyAllStatsAccordingToEnemyLevel()
     {
-        // 调整所有属性，包括主要属性、防御属性、攻击属性、魔法属性和货币掉落
+        //调整所有属性，包括主要属性、防御属性、攻击属性、魔法属性和货币掉落
         foreach (Stat stat in GetType().GetFields().Where(f => typeof(Stat).IsAssignableFrom(f.FieldType)).Select(f => (Stat)f.GetValue(this)))
         {
             ModifyStatAccordingToEnemyLevel(stat);

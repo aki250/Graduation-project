@@ -55,9 +55,9 @@ public class PlayerFX : EntityFX
         {
             //设置震动方向和震动强度
             screenShake.m_DefaultVelocity = new Vector3(_shakeDirection.x * player.facingDirection, _shakeDirection.y) * shakeMultiplier;
-            screenShake.GenerateImpulse();  // 生成震动
-            canScreenShake = false;  // 禁止再次震动
-            Invoke("EnableScreenShake", 0.05f);  // 0.05秒后允许下一次震动
+            screenShake.GenerateImpulse();  //生成震动
+            canScreenShake = false;  //禁止再次震动
+            Invoke("EnableScreenShake", 0.05f);  //0.05秒后允许下一次震动
         }
     }
 
@@ -90,7 +90,7 @@ public class PlayerFX : EntityFX
         }
     }
 
-    // 播放下击尘土特效
+    //播放下击尘土特效
     public void PlayDownStrikeDustFX()
     {
         if (downStrikeDustFX != null)
