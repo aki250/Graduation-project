@@ -60,11 +60,10 @@ public class SwordSkill : Skill
     [SerializeField] private int dotNumber;  //瞄准点的数量
     [SerializeField] private float spaceBetweenDots;  //瞄准点之间的间距
     [SerializeField] private GameObject dotPrefab;  //瞄准点预制体
-    [SerializeField] private Transform dotsParent;  //瞄准点的父物体（一般是 UI）
+    [SerializeField] private Transform dotsParent;  //瞄准点的父物体
 
     private GameObject[] dots;  //瞄准点数组
 
-    // 初始化
     protected override void Start()
     {
         base.Start();
@@ -110,7 +109,7 @@ public class SwordSkill : Skill
 
         SetupSwordGravity();  //设置剑的重力
 
-        // 根据剑的类型设置相关属性
+        //根据剑的类型设置相关属性
         if (swordType == SwordType.Bounce)
         {
             newSwordScript.SetupBounceSword(true, bounceAmount, bounceSpeed);
@@ -129,7 +128,7 @@ public class SwordSkill : Skill
         ShowDots(false);  //隐藏瞄准点
     }
 
-    // 设置不同剑的重力
+    //设置不同剑的重力
     private void SetupSwordGravity()
     {
         if (swordType == SwordType.Bounce)
@@ -151,27 +150,27 @@ public class SwordSkill : Skill
     }
 
     #region Aim
-    // 计算玩家的瞄准方向
+    //计算玩家的瞄准方向
     public Vector2 AimDirection()
     {
         Vector2 playerPosition = player.transform.position;
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);  // 获取鼠标位置
-        Vector2 direction = mousePosition - playerPosition;  // 计算玩家与鼠标的方向
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);  //获取鼠标位置
+        Vector2 direction = mousePosition - playerPosition;  //计算玩家与鼠标的方向
         return direction;
     }
 
-    // 生成瞄准点
+    //生成瞄准点
     private void GenerateDots()
     {
         dots = new GameObject[dotNumber];
         for (int i = 0; i < dotNumber; i++)
         {
             dots[i] = Instantiate(dotPrefab, player.transform.position, Quaternion.identity, dotsParent);
-            dots[i].SetActive(false);  // 初始时不显示
+            dots[i].SetActive(false);  //初始时不显示
         }
     }
 
-    // 显示或隐藏瞄准点
+    //显示或隐藏瞄准点
     public void ShowDots(bool _showDots)
     {
         for (int i = 0; i < dotNumber; i++)
@@ -180,14 +179,14 @@ public class SwordSkill : Skill
         }
     }
 
-    // 根据时间计算瞄准点的位置
+    //根据时间计算瞄准点的位置             
     private Vector2 SetDotsPosition(float t)
     {
-        // 斜抛运动的公式：水平方向匀速，竖直方向受到重力影响
+        //斜抛运动的公式：水平方向匀速，竖直方向受到重力影响
         Vector2 position = (Vector2)player.transform.position + new Vector2(
             AimDirection().normalized.x * launchSpeed.x,
-            AimDirection().normalized.y * launchSpeed.y) * t  // 水平方向的运动 d = vt
-            + 0.5f * (Physics2D.gravity * swordGravity) * (t * t);  // 竖直方向受重力影响，h = v0t - 0.5gt^2
+            AimDirection().normalized.y * launchSpeed.y) * t  //水平方向运动
+            + 0.5f * (Physics2D.gravity * swordGravity) * (t * t);  //竖直方向受重力影响
 
         return position;
     }
@@ -195,7 +194,7 @@ public class SwordSkill : Skill
     #endregion
 
 
-    // 检查存档中已解锁的技能
+    //检查存档中已解锁的技能
     protected override void CheckUnlockFromSave()
     {
         UnlockThrowSwordSkill();
@@ -208,7 +207,7 @@ public class SwordSkill : Skill
 
     #region Unlock Skill
 
-    // 解锁投掷剑技能
+    //解锁投掷剑技能
     private void UnlockThrowSwordSkill()
     {
         if (throwSwordSkillUnlocked)
@@ -219,11 +218,11 @@ public class SwordSkill : Skill
         if (throwSwordSkillUnlockButton.unlocked)
         {
             throwSwordSkillUnlocked = true;
-            swordType = SwordType.Regular;  // 默认使用普通剑
+            swordType = SwordType.Regular;  //默认使用普通剑
         }
     }
 
-    // 解锁反弹剑技能
+    //解锁反弹剑技能
     private void UnlockBounceSword()
     {
         if (bounceSwordUnlocked)
@@ -238,7 +237,7 @@ public class SwordSkill : Skill
         }
     }
 
-    // 解锁穿透剑技能
+    //解锁穿透剑技能
     private void UnlockPierceSword()
     {
         if (pierceSwordUnlocked)
@@ -253,7 +252,7 @@ public class SwordSkill : Skill
         }
     }
 
-    // 解锁旋转剑技能
+    //解锁旋转剑技能
     private void UnlockSpinSword()
     {
         if (spinSwordUnlocked)
@@ -268,7 +267,7 @@ public class SwordSkill : Skill
         }
     }
 
-    // 解锁时间停止技能
+    //解锁时间停止被动
     private void UnlockTimeStop()
     {
         if (timeStopUnlocked)
@@ -282,7 +281,7 @@ public class SwordSkill : Skill
         }
     }
 
-    // 解锁敌人脆弱技能
+    //解锁敌人脆弱技能
     private void UnlockVulnerability()
     {
         if (vulnerabilityUnlocked)

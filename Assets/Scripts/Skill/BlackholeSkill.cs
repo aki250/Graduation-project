@@ -7,7 +7,7 @@ using UnityEngine.UI;
                                                                     //黑洞技能
 public class BlackholeSkill : Skill
 {
-    [Header("Blackhole Unlock Info")]
+    [Header("黑洞解锁")]
     [SerializeField] private SkillTreeSlot_UI blackholeUnlockButton; //黑洞技能解锁按钮的 UI 组件
     public bool blackholeUnlocked { get; private set; } //黑洞技能是否已解锁
 

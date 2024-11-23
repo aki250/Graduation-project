@@ -210,6 +210,6 @@ public class Entity : MonoBehaviour
 
     protected virtual void ReturnDefaultSpeed()
     {
-        anim.speed = 1; //设置动画速度为1
+        //anim.speed = 1; //设置动画速度为1
     }
 }

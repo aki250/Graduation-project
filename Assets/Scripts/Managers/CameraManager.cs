@@ -9,12 +9,12 @@ public class CameraManager : MonoBehaviour
 
     public CinemachineVirtualCamera cm;
 
-    [Header("Camera Lens Info")]
+    [Header("ÉãÏñÍ·½¹¾à")]
     public float defaultCameraLensSize;
     public float targetCameraLensSize;
     public float cameraLensSizeChangeSpeed;
 
-    [Header("Camera Screen Y Position Info")]
+    [Header("ÉãÏñ»úÆÁÄ»YÎ»ÖÃ")]
     public float defaultCameraYPosition;
     public float targetCameraYPosition;
     public float cameraYPositionChangeSpeed;

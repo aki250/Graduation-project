@@ -12,7 +12,7 @@ public class ItemDrop : MonoBehaviour
     //实际掉落的物品列表
     private List<ItemData> actualDropList = new List<ItemData>();
 
-    //掉落物品的预制件，掉落时会根据设置的物品类型来初始化
+    //掉落物品的预制件
     [SerializeField] private GameObject dropItemPrefab;
 
 
@@ -43,7 +43,7 @@ public class ItemDrop : MonoBehaviour
         }
     }
 
-    //当敌人死亡时调用此方法
+    //当死亡时调用此方法
     protected void DropItem(ItemData _itemToDrop)
     {
         //创建新的掉落物品实例，位置在敌人的当前位置

@@ -7,7 +7,7 @@ public class TextEnemy : Enemy
     //敌人碰撞器
     public BoxCollider2D textCollider { get; set; }
 
-    [Header("死亡奖励")]
+    [Header("死亡掉落")]
     //死亡后掉落的货币数量
     public int currencyToGive;
     //死亡时显示的物体列表

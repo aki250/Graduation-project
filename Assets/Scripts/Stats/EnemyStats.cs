@@ -29,7 +29,7 @@ public class EnemyStats : CharacterStats
     //敌人受到伤害时调用
     public override void TakeDamage(int _damage, Transform _attacker, Transform _attackee, bool _isCrit)
     {
-        base.TakeDamage(_damage, _attacker, _attackee, _isCrit); //调用基类的 TakeDamage 方法
+        base.TakeDamage(_damage, _attacker, _attackee, _isCrit);
 
         //敌人进入战斗状态
         enemy.GetIntoBattleState();
@@ -37,17 +37,17 @@ public class EnemyStats : CharacterStats
 
     protected override void Die()
     {
-        base.Die(); //调用基类的Die
+        base.Die();
 
-        enemy.Die(); //敌人执行死亡逻辑
+        enemy.Die(); //敌人死亡
 
         //敌人死亡时掉落物品
         itemDropSystem.GenrateDrop();
 
-        // 玩家获得货币
+        //玩家获得货币
         PlayerManager.instance.currency += currencyDropAmount.GetValue();
 
-        // 3秒后销毁敌人对象
+        //3秒后销毁敌人对象
         Destroy(gameObject, 3f);
     }
 
@@ -56,7 +56,7 @@ public class EnemyStats : CharacterStats
     {
         currentHP = 0; //设置当前生命值为0
 
-        base.Die(); //调用基类的Die方法
+        base.Die();
 
         if (onHealthChanged != null) //如果有健康状态改变的委托
         {

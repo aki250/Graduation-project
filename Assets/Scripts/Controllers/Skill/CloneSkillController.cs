@@ -46,7 +46,7 @@ public class CloneSkillController : MonoBehaviour
         }
     }
 
-    // 设置克隆的相关参数
+    //克隆的相关参数
     public void SetupClone(float _cloneDuration, float _colorLosingSpeed, bool _canAttack, Transform _closestEnemy, bool _canDuplicateClone, float _duplicatePossibility, float _cloneAttackDamageMultiplier)
     {
         if (_canAttack)
@@ -55,68 +55,68 @@ public class CloneSkillController : MonoBehaviour
             anim.SetInteger("AttackNumber", Random.Range(1, 4));
         }
 
-        // 设置克隆的持续时间、消失速度、敌人、克隆副本生成的可能性等参数
+        //克隆的持续时间、消失速度、敌人、克隆副本生成的可能性等参数
         cloneDuration = _cloneDuration;
         colorLosingSpeed = _colorLosingSpeed;
-        cloneTimer = cloneDuration;  // 设置克隆计时器为克隆持续时间
+        cloneTimer = cloneDuration;  //设置克隆计时器为克隆持续时间
 
-        closestEnemy = _closestEnemy;  // 设置最近的敌人
+        closestEnemy = _closestEnemy;  //最近的敌人
 
         // 使克隆面向最近的敌人
         FaceClosestTarget();
 
-        canDuplicateClone = _canDuplicateClone;  // 是否可以生成副本
-        duplicatePossibility = _duplicatePossibility;  // 副本生成概率
-        cloneAttackDamageMultiplier = _cloneAttackDamageMultiplier;  // 克隆攻击伤害倍数
+        canDuplicateClone = _canDuplicateClone;  //是否可以生成副本
+        duplicatePossibility = _duplicatePossibility;  //副本生成概率
+        cloneAttackDamageMultiplier = _cloneAttackDamageMultiplier;  //克隆攻击伤害倍数
     }
 
-    // 触发动画结束，停止克隆
+    //触发动画结束，停止克隆
     private void AnimationTrigger()
     {
-        cloneTimer = -0.1f;  // 立即结束克隆计时
+        cloneTimer = -0.1f;  //立即结束克隆计时
     }
 
-    // 触发攻击事件
+    //触发攻击事件
     private void AttackTrigger()
     {
-        // 如果学会了激进的幻象技能，克隆攻击时也会应用击中效果
+        //如果学会了激进的幻象技能，克隆攻击时也会应用击中效果
         if (SkillManager.instance.clone.aggressiveCloneCanApplyOnHitEffect)
         {
-            Inventory.instance.ReleaseSwordArcane_ConsiderCooldown();  // 释放剑的奥术技能（如果有的话）
+            Inventory.instance.ReleaseSwordArcane_ConsiderCooldown();  //释放剑的奥术技能（如果有的话）
         }
 
-        // 检测攻击范围内的所有碰撞体（敌人）
+        //检测攻击范围内的所有碰撞体（敌人）
         Collider2D[] colliders = Physics2D.OverlapCircleAll(attackCheck.position, attackCheckRadius);
 
         foreach (var hit in colliders)
         {
-            // 如果碰撞体是敌人
+            //如果碰撞体是敌人
             if (hit.GetComponent<Enemy>() != null)
             {
-                Enemy enemy = hit.GetComponent<Enemy>();  // 获取敌人
+                Enemy enemy = hit.GetComponent<Enemy>();  //获取敌人
 
-                // 获取玩家的属性（用于计算伤害）
+                //获取玩家的属性（用于计算伤害）
                 PlayerStats playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
                 // 克隆的伤害应该比玩家本身的伤害小
                 if (playerStats != null)
                 {
-                    playerStats.CloneDoDamage(enemy.GetComponent<CharacterStats>(), cloneAttackDamageMultiplier, transform);  // 克隆攻击伤害
+                    playerStats.CloneDoDamage(enemy.GetComponent<CharacterStats>(), cloneAttackDamageMultiplier, transform);  //克隆攻击伤害
                 }
 
-                // 如果学会了激进幻象，克隆攻击时也会应用击中效果
+                //如果学会了激进幻象，克隆攻击时也会应用击中效果
                 if (SkillManager.instance.clone.aggressiveCloneCanApplyOnHitEffect)
                 {
-                    Inventory.instance.UseSwordEffect_ConsiderCooldown(enemy.transform);  // 触发剑的技能效果
+                    Inventory.instance.UseSwordEffect_ConsiderCooldown(enemy.transform);  //触发剑的技能效果
                 }
 
-                // 如果可以生成副本
+                //生成副本
                 if (canDuplicateClone)
                 {
-                    // 随机决定是否在敌人附近生成一个副本
+                    //随机决定是否在敌人附近生成一个副本
                     if (Random.Range(0, 100) < duplicatePossibility && SkillManager.instance.clone.currentDuplicateCloneAmount < SkillManager.instance.clone.maxDuplicateCloneAmount)
                     {
-                        // 在敌人旁边随机位置创建副本
+                        //在敌人旁边随机位置创建副本
                         SkillManager.instance.clone.CreateDuplicateClone(new Vector3(hit.transform.position.x + 1f * cloneFacingDirection, hit.transform.position.y));
                     }
                 }
@@ -124,7 +124,7 @@ public class CloneSkillController : MonoBehaviour
         }
     }
 
-    // 使克隆面向最近的敌人
+    //使克隆面向最近的敌人
     private void FaceClosestTarget()
     {
         if (closestEnemy != null)
@@ -137,12 +137,12 @@ public class CloneSkillController : MonoBehaviour
         }
     }
 
-    // 翻转克隆的面朝方向
+    //翻转克隆的面朝方向
     private void CloneFlip()
     {
-        transform.Rotate(0, 180, 0);  // 翻转物体180度
+        transform.Rotate(0, 180, 0); 
 
-        cloneFacingRight = !cloneFacingRight;  // 切换面朝方向
-        cloneFacingDirection = -cloneFacingDirection;  // 改变克隆面朝方向的数值（-1为左，1为右）
+        cloneFacingRight = !cloneFacingRight;  //切换面朝方向
+        cloneFacingDirection = -cloneFacingDirection;  //改变克隆面朝方向的数值
     }
 }

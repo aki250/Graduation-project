@@ -3,21 +3,23 @@ using UnityEngine;
 public class Arrow_Controller : MonoBehaviour
 {
     [SerializeField] private string targetLayerName = "Player";
-    //[SerializeField] private int damage;
+    //[SerializeField] private int damage; //箭的伤害值
 
-    //private float xVelocity;
-    private Vector2 flySpeed;
-    private Rigidbody2D rb;
-    private CharacterStats archerStats;
+    private Vector2 flySpeed;    //飞行速度
+    private Rigidbody2D rb; //刚体组件
+    private CharacterStats archerStats; //弓箭手的属性，用于伤害计算
 
-    [SerializeField] private bool canMove = true;
-    [SerializeField] private bool flipped = false;
 
+    [SerializeField] private bool canMove = true;    //箭是否移动
+
+    [SerializeField] private bool flipped = false;  //翻转
+
+    //箭是否卡住
     private bool isStuck = false;
-
 
     private void Awake()
     {
+        //初始化刚体组件
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -25,50 +27,51 @@ public class Arrow_Controller : MonoBehaviour
     {
         if (canMove)
         {
+            //箭飞行速度
             rb.velocity = flySpeed;
+            //调整箭的朝向，使其始终面向飞行方向
             transform.right = rb.velocity;
         }
 
-        //make arrow transparent and destroy it in 3 ~ 5 seconds after stuck into object
+        //箭卡在物体中，3到5秒后变透明并销毁
         if (isStuck)
         {
             Invoke("BecomeTransparentAndDestroyArrow", Random.Range(3, 5));
         }
 
-        //if the arrow flies too far and dosen't hit any targets, auto destroy it
-        //shouldn't use distance check here cuz when archer dies he's gonna fall down and this arrow will get destroyed too early
+        // 如果箭飞行时间超过10秒未击中目标，自动销毁
         Invoke("BecomeTransparentAndDestroyArrow", 10f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Arrow collided with " + collision.gameObject.name);
+        Debug.Log("箭与 " + collision.gameObject.name + " 碰撞");
 
-        //if the arrow hits player
-        //using layerMask is dangerous here, because some child objects of player and enemy with collider components
-        //may also be in this targetLayer
+        //如果箭击中了玩家
         if (collision.gameObject.layer == LayerMask.NameToLayer(targetLayerName))
         {
             if (collision.GetComponent<CharacterStats>() != null)
             {
+                //对目标造成伤害
                 archerStats.DoDamge(collision.GetComponent<CharacterStats>());
+                //卡在目标物体上
                 StuckIntoCollidedObject(collision);
             }
-
         }
-        //if the arrow hits ground
+        //箭击中地面
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
+            //卡在地面上
             StuckIntoCollidedObject(collision);
         }
     }
 
+    //初始化箭的飞行速度和弓箭手的属性
     public void SetupArrow(Vector2 _speed, CharacterStats _archerStats)
     {
         flySpeed = _speed;
 
-        //if the arrow is flying to the left side.
-        //needs to flip it first
+        //如果箭向左飞行，需要翻转
         if (flySpeed.x < 0)
         {
             transform.Rotate(0, 180, 0);
@@ -79,48 +82,50 @@ public class Arrow_Controller : MonoBehaviour
 
     private void StuckIntoCollidedObject(Collider2D collision)
     {
-        //turn off the trail effect
+        //关闭箭的尾迹效果
         GetComponentInChildren<ParticleSystem>()?.Stop();
 
-        //to prevent the arrow from damaging player multiple times after getting stuck into player
+        //防止箭卡住后多次对目标造成伤害
         GetComponent<CapsuleCollider2D>().enabled = false;
 
-        //stuck into object
+        //将箭卡在物体上
         canMove = false;
-        rb.isKinematic = true;
-        rb.constraints = RigidbodyConstraints2D.FreezeAll;
-        transform.parent = collision.transform;
+        rb.isKinematic = true; //刚体为静态
+        rb.constraints = RigidbodyConstraints2D.FreezeAll; //冻结刚体
+        transform.parent = collision.transform; //将箭设置为碰撞物体的子物体
 
-        //destroy this arrow in several seconds after stuck into object
         isStuck = true;
     }
 
     private void BecomeTransparentAndDestroyArrow()
     {
+        //获取箭的SpriteRenderer组件
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
+        //减少箭的透明度
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, sr.color.a - (5 * Time.deltaTime));
 
+        //箭完全透明，则销毁对象
         if (sr.color.a <= 0)
         {
             Destroy(gameObject);
         }
     }
 
+    //翻转箭的方向（使其攻击敌人而非玩家）
     public void FlipArrow()
     {
         if (flipped)
         {
-            return;
+            return; //如果已经翻转，则不重复操作
         }
 
-        //flip the arrow
+        //翻转飞行速度和箭的方向
         flySpeed.x *= -1;
         flySpeed.y *= -1;
         transform.Rotate(0, 180, 0);
         flipped = true;
 
-        //the arrow now will attack enemy
-        targetLayerName = "Enemy";
+        targetLayerName = "Enemy";  //修改目标层为"Enemy"
     }
 }

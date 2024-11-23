@@ -163,37 +163,36 @@ public class ItemData_Equipment : ItemData
         }
     }
 
-
     public void ReleaseSwordArcane_ConsiderCooldown()
     {
-        // >= here to prevent the case
-        // where mutilple 0-cooldown effects need to get executed at the same time
-        // but all of the effects next to the first one will be in cooldown
-
+        // 这里使用 >= 目的是防止在多个 0 冷却时间效果需要同时执行时
+        //但第一个效果后的所有效果都会进入冷却
         foreach (var effect in itemEffects)
         {
             bool canUseEffect = Time.time >= effect.effectLastUseTime + effect.effectCooldown;
 
+            // 如果可以使用效果，或者效果未被使用过
             if (canUseEffect || !effect.effectUsed)
             {
                 effect.ReleaseSwordArcane();
-                effect.effectLastUseTime = Time.time;
-                effect.effectUsed = true;
-                Inventory.instance.UpdateStatUI();
-                Debug.Log($"Use Sword Arcane: {effect.name}");
+                effect.effectLastUseTime = Time.time; //更新效果上次使用时间
+                effect.effectUsed = true; //标记效果已被使用
+                Inventory.instance.UpdateStatUI(); //更新物品状态UI
+                Debug.Log($"Use Sword Arcane: {effect.name}"); //输出调试信息
             }
             else
             {
-                Debug.Log("Item Effect is in cooldown");
+                Debug.Log("Item Effect is in cooldown"); //输出调试信息：效果正在冷却中
             }
         }
     }
 
     public override string GetItemStatInfoAndEffectDescription()
     {
-        sb.Length = 0;
-        statInfoLength = 0;
+        sb.Length = 0; // 清空 StringBuilder
+        statInfoLength = 0; // 重置统计信息的行数
 
+        // 添加各项属性信息
         AddItemStatInfo(strength, "Strength");
         AddItemStatInfo(agility, "Agility");
         AddItemStatInfo(intelligence, "Intelligence");
@@ -212,29 +211,29 @@ public class ItemData_Equipment : ItemData
         AddItemStatInfo(iceDamage, "Ice Dmg");
         AddItemStatInfo(lightningDamage, "Lightning Dmg");
 
+        // 如果有物品效果并且有属性信息
         if (itemEffects.Length > 0 && statInfoLength > 0)
         {
+            // 如果第一个效果有描述信息，添加空行分隔属性信息和效果描述
             if (itemEffects[0].effectDescription.Length > 0)
             {
-                //add space between stat info and effect description;
                 sb.AppendLine();
             }
         }
 
+        // 遍历所有物品效果，添加效果描述
         for (int i = 0; i < itemEffects.Length; i++)
         {
             sb.AppendLine();
 
-            //english
-            if (LanguageManager.instance.localeID == 0)
+            if (LanguageManager.instance.localeID == 0) //英文
             {
                 if (itemEffects[i].effectDescription.Length > 0)
                 {
                     sb.Append($"[unique effect]\n{itemEffects[i].effectDescription}\n");
                 }
             }
-            //chinese
-            else if (LanguageManager.instance.localeID == 1)
+            else if (LanguageManager.instance.localeID == 1) //中文
             {
                 if (itemEffects[i].effectDescription_Chinese.Length > 0)
                 {
@@ -242,27 +241,23 @@ public class ItemData_Equipment : ItemData
                 }
             }
 
-            statInfoLength++;
+            statInfoLength++; //增加属性信息的行数
         }
 
-        //make sure the space below unique effect is same as the one below stat info so that item tool tip looks nicer
+        // 确保“固有效果”下面的空行与属性信息下方的空行一致
         if (sb.ToString()[sb.Length - 1] == '\n')
         {
-            sb.Remove(sb.Length - 1, 1);
+            sb.Remove(sb.Length - 1, 1); // 移除末尾的换行符
         }
 
-
+        // 如果属性信息行数少于最小行数，添加空行
         //if (statInfoLength < minStatInfoLength)
         //{
         //    int _numberOfLinesToApped = minStatInfoLength - statInfoLength;
-        //    //StringBuilder.Append() will auto add a line
-        //    //if the String is empty
-        //    //so here make numberOfLinesToAppend-- to prevent adding an extra line
         //    if (statInfoLength == 0)
         //    {
         //        _numberOfLinesToApped--;
         //    }
-
         //    for (int i = 0; i < _numberOfLinesToApped; i++)
         //    {
         //        sb.AppendLine();
@@ -271,27 +266,30 @@ public class ItemData_Equipment : ItemData
         //}
 
         sb.AppendLine();
-        sb.Append("");
+        sb.Append(""); // 添加空行
         sb.AppendLine();
-        sb.Append("");
+        sb.Append(""); // 添加空行
 
-        return sb.ToString();
+        return sb.ToString(); // 返回最终的字符串
     }
 
     private void AddItemStatInfo(int _statValue, string _statName)
     {
+        // 如果属性值不为 0，添加属性信息
         if (_statValue != 0)
         {
             if (sb.Length > 0)
             {
-                sb.AppendLine();
+                sb.AppendLine(); //已经有内容，添加换行
             }
 
+            //属性值大于0，显示加号
             if (_statValue > 0)
             {
                 sb.Append($"+ {_statValue} {_statName}");
-                statInfoLength++;
+                statInfoLength++; //增加属性信息的行数
             }
         }
     }
+
 }

@@ -13,7 +13,7 @@ public class Enemy : Entity
     public float patrolStayTime;  //巡逻时间
     private float defaultPatrolMoveSpeed;  //默认巡逻速度
 
-    [Header("Recon Info")] 
+    [Header("侦察范围")] 
     public float playerScanDistance = 10;  //玩家扫描距离
     public float playerHearDistance = 3;  //玩家听觉范围
 
@@ -27,10 +27,10 @@ public class Enemy : Entity
 
     [Header("攻击")] 
     public float attackDistance = 2;  //攻击距离
-    public float attackCooldown = 1.5f;  // 攻击冷却时间
-    public float minAttackCooldown = 1;  // 最小攻击冷却时间
-    public float maxAttackCooldown = 2;  // 最大攻击冷却时间
-    [HideInInspector] public float lastTimeAttacked;  // 上次攻击时间
+    public float attackCooldown = 1.5f;  //攻击冷却时间
+    public float minAttackCooldown = 1;  //最小攻击冷却时间
+    public float maxAttackCooldown = 2;  //最大攻击冷却时间
+    [HideInInspector] public float lastTimeAttacked;  //上次攻击时间
 
     [Header("眩晕设定")]
     protected bool canBeStunned;  //是否能被眩晕
@@ -166,7 +166,7 @@ public class Enemy : Entity
     {
         patrolMoveSpeed = patrolMoveSpeed * (1 - _percentage);  //降低巡逻速度
         battleMoveSpeed = battleMoveSpeed * (1 - _percentage);  //降低战斗速度
-        anim.speed = anim.speed * (1 - _percentage);  //降低动画速度
+       //anim.speed = anim.speed * (1 - _percentage);  //降低动画速度
 
         Invoke("ReturnDefaultSpeed", _duration);  //恢复速度的延时调用
     }

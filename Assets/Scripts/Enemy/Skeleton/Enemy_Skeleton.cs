@@ -5,12 +5,13 @@ using UnityEngine;
 public class Enemy_Skeleton : Enemy
 {
     #region States
-    public SkeletonIdleState idleState {  get; private set; }
-    public SkeletonMoveState moveState { get; private set; }
-    public SkeletonBattleState battleState { get; private set; }
-    public SkeletonAttackState attackState { get; private set; }
-    public SkeletonStunnedState stunnedState { get; private set; }
-    public SkeletonDeathState deathState { get; private set; }
+    //骷髅敌人状态
+    public SkeletonIdleState idleState { get; private set; }    //待机状态
+    public SkeletonMoveState moveState { get; private set; }    //移动状态
+    public SkeletonBattleState battleState { get; private set; }    //战斗状态
+    public SkeletonAttackState attackState { get; private set; }    //攻击状态
+    public SkeletonStunnedState stunnedState { get; private set; }  //眩晕状态
+    public SkeletonDeathState deathState { get; private set; }  //死亡状态
     #endregion
 
     protected override void Awake()
@@ -29,7 +30,9 @@ public class Enemy_Skeleton : Enemy
     {
         base.Start();
 
+        //初始化敌人最后一次攻击的时间信息
         InitializeLastTimeInfo();
+        //敌人初始状态为待机状态
         stateMachine.Initialize(idleState);
     }
 
@@ -37,51 +40,48 @@ public class Enemy_Skeleton : Enemy
     {
         base.Update();
 
-        //to prevent counter image from always showing when skeleton's attack got interrupted
+        //防止反击窗口在骨架敌人攻击被打断时总是显示
         if (stateMachine.currentState != attackState)
         {
             CloseCounterAttackWindow();
         }
 
-        //if (Input.GetKeyDown(KeyCode.U))
-        //{
-        //    stateMachine.ChangeState(stunnedState);
-        //}
     }
 
+    // 重写基类方法，判断骨架敌人是否可以被反击打晕
     public override bool CanBeStunnedByCounterAttack()
     {
+        // 如果基类可以反击打晕，则进入眩晕状态
         if (base.CanBeStunnedByCounterAttack())
         {
-            stateMachine.ChangeState(stunnedState);
-            return true;
+            stateMachine.ChangeState(stunnedState);  // 切换到眩晕状态
+            return true;  // 返回true，表示敌人被打晕
         }
 
-        return false;
+        return false;  // 否则返回false
     }
 
+    //重写死亡，敌人死亡逻辑
     public override void Die()
     {
-        base.Die();
+        base.Die(); 
 
         stateMachine.ChangeState(deathState);
     }
 
+    //进入战斗状态
     public override void GetIntoBattleState()
     {
-        //if (stateMachine.currentState == battleState || stateMachine.currentState == attackState)
-        //{
-        //    return;
-        //}
-
+        //如果当前已经在战斗状态或攻击状态，或已经死亡，就不再进入战斗状态
         if (stateMachine.currentState != battleState && stateMachine.currentState != stunnedState && stateMachine.currentState != deathState)
         {
-            stateMachine.ChangeState(battleState);
+            stateMachine.ChangeState(battleState);  //切换到战斗状态
         }
     }
 
+    //初始化敌人上次攻击的时间，防止逻辑错误
     protected override void InitializeLastTimeInfo()
     {
-        lastTimeAttacked = 0;
+        lastTimeAttacked = 0;  //初始化攻击时间
     }
 }

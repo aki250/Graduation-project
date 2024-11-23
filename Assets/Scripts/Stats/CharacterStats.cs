@@ -158,7 +158,6 @@ public class CharacterStats : MonoBehaviour
 
         if (crit)
         {
-            Debug.Log("Critical Attack!"); //打印暴击日志
             _totalDamage = CalculatCritDamage(_totalDamage); //计算暴击伤害
         }
 
@@ -379,16 +378,15 @@ public class CharacterStats : MonoBehaviour
 
     public void ApplyShockAilment(bool _shock)
     {
-        //如果目标已经处于震惊状态，则不能重复施加震惊
         if (isShocked)
         {
             return;
         }
 
-        //设置震惊状态并启动定时器
+        //震慑状态并启动定时器
         isShocked = _shock;
         shockedAilmentTimer = shockDuration.GetValue();
-        StartCoroutine(fx.EnableShockFXForTime_Coroutine(shockedAilmentTimer)); //启动震惊特效
+        StartCoroutine(fx.EnableShockFXForTime_Coroutine(shockedAilmentTimer)); //震慑特效
     }
 
     private void GenerateThunderStrikeAndHitClosestEnemy(float _targetScanRadius)

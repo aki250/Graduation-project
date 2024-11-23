@@ -47,17 +47,13 @@ public class PlayerStats : CharacterStats
                     playerFX.ScreenShake(playerFX.shakeDirection_medium);
                 }
             }
-            //else //for throw sword
-            //{
-            //    fx.ScreenShake(fx.shakeDirection_medium);
-            //}
         }
     }
 
     //玩家受到伤害时的处理
     public override void TakeDamage(int _damage, Transform _attacker, Transform _attackee, bool _isCrit)
     {
-        //暂时注释掉无敌判断
+        //无敌判断
         //if (isInvincible)
         //{
         //    return;

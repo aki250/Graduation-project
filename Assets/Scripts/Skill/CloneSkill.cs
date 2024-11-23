@@ -10,7 +10,7 @@ public class CloneSkill : Skill
     private float currentCloneAttackDamageMultipler;
 
     //clone == mirage
-    [Header("Clone Info")]
+    [Header("¿ËÂ¡Ìå")]
     [SerializeField] private GameObject clonePrefab;
     [SerializeField] private float cloneDuration;
     [SerializeField] private float colorLosingSpeed;

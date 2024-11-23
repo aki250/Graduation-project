@@ -10,7 +10,6 @@ public class PlayerAnimationTrigger : MonoBehaviour
     //下击碰撞器，用于处理下击攻击时的碰撞检测
     [SerializeField] private CircleCollider2D downStrikeCollider;
 
-    //动画触发器，调用Player组件中的 AnimationTrigger 方法
     private void AnimationTrigger()
     {
         player.AnimationTrigger();

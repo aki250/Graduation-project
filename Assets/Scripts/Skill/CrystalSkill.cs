@@ -11,7 +11,7 @@ public class CrystalSkill : Skill
     [SerializeField] private float crystalExistenceDuration;
     private GameObject currentCrystal;
 
-    [Header("Crystal Unlock Info")]
+    [Header("水晶解锁")]
     [SerializeField] private SkillTreeSlot_UI crystalUnlockButton;
     public bool crystalUnlocked { get; private set; }
 
@@ -23,12 +23,12 @@ public class CrystalSkill : Skill
     [SerializeField] private SkillTreeSlot_UI explosiveCrystalUnlockButton;
     public bool explosiveCrystalUnlocked { get; private set; }
 
-    [Header("Moving Crystal Unlock Info")]
+    [Header("水晶移动解锁")]
     [SerializeField] private SkillTreeSlot_UI movingCrystalUnlockButton;
     public bool movingCrystalUnlocked { get; private set; }
     [SerializeField] private float moveSpeed;
 
-    [Header("Crystal Gun Unlock Info")]
+    [Header("水晶枪解锁")]
     [SerializeField] private SkillTreeSlot_UI crystalGunUnlockButton;
     public bool crystalGunUnlocked { get; private set; }
     [SerializeField] private int magSize;
