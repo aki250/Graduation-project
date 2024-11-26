@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DeathBringerGroundedState : DeathBringerState
 {
-    protected Transform player;
+    protected Transform player; //获取玩家位置
 
     public DeathBringerGroundedState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, DeathBringer _enemy) : base(_enemyBase, _stateMachine, _animBoolName, _enemy)
     {
@@ -26,18 +26,15 @@ public class DeathBringerGroundedState : DeathBringerState
     public override void Update()
     {
         base.Update();
-        
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            stateMachine.ChangeState(enemy.teleportState);
-        }
+        //测试boss传送状态
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    stateMachine.ChangeState(enemy.teleportState);
+        //}
 
-        //if enemy can see player inside its scan range
-        //or player is behind enemy
-        //but he's too close to the enemy
-        //enemy will hear the player's footsteps
-        //and also enter battleState
-        if ((enemy.IsPlayerDetected() || Vector2.Distance(player.position, enemy.transform.position) < enemy.playerHearDistance) && !player.GetComponent<PlayerStats>().isDead)
+        //敌人在其扫描范围内检测到玩家，或者玩家在敌人后方但距离过近，敌人会听到玩家的脚步声并进入战斗状态
+        if ((enemy.IsPlayerDetected() || Vector2.Distance(player.position, enemy.transform.position)
+            < enemy.playerHearDistance) && !player.GetComponent<PlayerStats>().isDead)
         {
             stateMachine.ChangeState(enemy.battleState);
             return;

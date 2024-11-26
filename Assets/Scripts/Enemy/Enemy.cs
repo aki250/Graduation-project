@@ -30,7 +30,7 @@ public class Enemy : Entity
     public float attackCooldown = 1.5f;  //攻击冷却时间
     public float minAttackCooldown = 1;  //最小攻击冷却时间
     public float maxAttackCooldown = 2;  //最大攻击冷却时间
-    [HideInInspector] public float lastTimeAttacked;  //上次攻击时间
+    [HideInInspector] public float lastTimeAttacked;  //上次攻击时间，不进行攻击重置会导致许多bug，敌人攻击频率错误，或无法攻击的问题
 
     [Header("眩晕设定")]
     protected bool canBeStunned;  //是否能被眩晕

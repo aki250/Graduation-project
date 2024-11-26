@@ -44,10 +44,10 @@ public class DeathBringerAttackState : DeathBringerState
             enemy.SetVelocity(0, rb.velocity.y);
         }
 
-        // 检查是否需要触发转态变更
+        //检查是否需要触发转态变更
         if (triggerCalled)
         {
-            // 如果敌人可以传送，则切换到传送状态
+            //敌人可以传送，则切换到传送状态
             if (enemy.CanTeleport())
             {
                 stateMachine.ChangeState(enemy.teleportState);

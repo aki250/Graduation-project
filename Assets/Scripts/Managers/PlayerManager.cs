@@ -21,10 +21,10 @@ public class PlayerManager : MonoBehaviour, IGameProgressionSaveManager
 
     private void Update()
     {                                                          
-        if (Input.GetKeyDown(KeyCode.F2))  ////////////////记得注释掉
-        {
-            Cheat_Get500Currency();
-        }
+        //if (Input.GetKeyDown(KeyCode.F2))  ////////////////记得注释掉
+        //{
+        //    Cheat_Get500Currency();
+        //}
 
         if (currency >= 999999)
         {

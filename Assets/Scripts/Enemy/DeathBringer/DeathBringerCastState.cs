@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DeathBringerCastState : DeathBringerState
 {
-    private int castAmount;
-    private float castTimer;
+    private int castAmount; //施法次数
+    private float castTimer;    //施法间隔计数器
 
     public DeathBringerCastState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, DeathBringer _enemy) : base(_enemyBase, _stateMachine, _animBoolName, _enemy)
     {
@@ -15,15 +15,15 @@ public class DeathBringerCastState : DeathBringerState
     {
         base.Enter();
 
-        castAmount = enemy.castAmount;
-        castTimer = 0.5f;
+        castAmount = enemy.castAmount;  //设置为，敌人的施法次数
+        castTimer = 0.5f;   //初始化计时器
     }
 
     public override void Exit()
     {
         base.Exit();
 
-        enemy.lastTimeEnterSpellCastState = Time.time;
+        enemy.lastTimeEnterSpellCastState = Time.time;  //最后一次施法时间
     }
 
     public override void Update()
@@ -32,13 +32,12 @@ public class DeathBringerCastState : DeathBringerState
 
         castTimer -= Time.deltaTime;
 
-        //only when death bringer has casted all the spells can he exit cast state
+        //只有当死亡使者施放了所有法术后，才能退出施法状态
         if (CanCast())
         {
             enemy.CastSpell();
         }
         
-        //if death bringer is out of cast amount, he'll exit cast state
         if (castAmount <= 0)
         {
             stateMachine.ChangeState(enemy.teleportState);
@@ -47,10 +46,11 @@ public class DeathBringerCastState : DeathBringerState
 
     private bool CanCast()
     {
+        //次数，时间都满足才能施法
         if (castAmount >= 0 && castTimer < 0)
         {
             castAmount--;
-            castTimer = enemy.castCooldown;
+            castTimer = enemy.castCooldown; //重置施法计时器，为敌人的施法冷却时间
             return true;
         }
 

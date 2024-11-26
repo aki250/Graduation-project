@@ -15,15 +15,12 @@ public class ArcherBattleState : ArcherState
     {
         base.Enter();
 
-        //entering battleState will set the default enemy aggressiveTime
-        //To prevent the case where if player approaching enemy from behind
-        //enemy will get stuck in switching between idleState and battleState
+        //设置敌人默认攻击时间，                           避免玩家从背后接近时，敌人反复切换状态
         stateTimer = enemy.aggressiveTime;
 
         player = PlayerManager.instance.player.transform;
 
-        //if player is attacking enemy from behind,
-        //enemy will turn to player's side immediately
+        //角色绕后，敌人则会面向玩家
         FacePlayer();
 
         if (player.GetComponent<PlayerStats>().isDead)
@@ -43,27 +40,21 @@ public class ArcherBattleState : ArcherState
     {
         base.Update();
 
+        //如果当前状态不是战斗状态，直接返回，避免状态冲突
         if (enemy.stateMachine.currentState != this)
         {
             return;
         }
 
-
-        //AudioManager.instance.PlaySFX(24, enemy.transform);
-
-        //AudioManager.instance.PlaySFX(14, enemy.transform);
-
-        //enemy always faces player in battle state
-        //to prevent enemy from getting stuck in edge of ground
+        //防止卡地形边缘
         FacePlayer();
 
         if (enemy.IsPlayerDetected())
         {
-            //If enemy can see player, then it's always in aggreesive mode
+            //如果敌人检测到玩家，则进入攻击模式并重置计时器
             stateTimer = enemy.aggressiveTime;
-            //Debug.Log("I see player");
 
-            //if player is too close to archer, archer will jump if available
+            // 玩家距离过近时，敌人跳跃以拉开距离
             if (Vector2.Distance(player.transform.position, enemy.transform.position) < enemy.jumpJudgeDistance)
             {
                 if (CanJump())
@@ -75,10 +66,9 @@ public class ArcherBattleState : ArcherState
                 }
             }
 
-            //if player is inside archer's attack range, archer will attack player
-            if (enemy.IsPlayerDetected() && Vector2.Distance(player.transform.position, enemy.transform.position) < enemy.attackDistance)
+            // 玩家在攻击范围内时，敌人切换到攻击状态
+            if (Vector2.Distance(player.transform.position, enemy.transform.position) < enemy.attackDistance)
             {
-
                 if (CanAttack())
                 {
                     anim.SetBool("Idle", false);
@@ -88,9 +78,9 @@ public class ArcherBattleState : ArcherState
                 }
             }
         }
-        else  //If enemy can't see player, 
+        else
         {
-            //If enemy can't see player or player is out of enemy's scan range, enemy will switch back to patrol mode
+            // 如果玩家不在扫描范围内，敌人切换到巡逻状态
             if (stateTimer < 0 || Vector2.Distance(player.transform.position, enemy.transform.position) > enemy.playerScanDistance)
             {
                 stateMachine.ChangeState(enemy.idleState);
@@ -98,9 +88,7 @@ public class ArcherBattleState : ArcherState
             }
         }
 
-        //this will make enemy move towards player only when player is far from enemy's attack distance
-        //or player is behind enemy
-        //when enemy is close to player it'll be stopped
+        //如果玩家距离较远或在敌人身后，敌人向玩家移动，当敌人接近玩家时，停止移动并切换为待机动画
         if (enemy.IsPlayerDetected() && Vector2.Distance(enemy.transform.position, player.transform.position) < enemy.attackDistance)
         {
             ChangeToIdleAnimation();
@@ -109,12 +97,13 @@ public class ArcherBattleState : ArcherState
 
     }
 
+    /// 如果满足条件，会随机生成新的攻击冷却时间。
     private bool CanAttack()
     {
+
+        //攻击需要满足冷却时间已结束,且敌人未被击退的条件。
         if (Time.time - enemy.lastTimeAttacked >= enemy.attackCooldown && !enemy.isKnockbacked)
         {
-            //enemy's lastTimeAttacked is set in attackState
-            //enemy's attack frequency will be random
             enemy.attackCooldown = Random.Range(enemy.minAttackCooldown, enemy.maxAttackCooldown);
             return true;
         }
@@ -122,10 +111,9 @@ public class ArcherBattleState : ArcherState
         return false;
     }
 
+    //检查敌人是否可以跳跃。需要满足后方没有坑或墙壁，冷却时间已结束且  敌人未被击退的条件。
     private bool CanJump()
     {
-        //if there's a pit behind archer, or there's a wall behind acher,
-        //archer will not jump away
         if (!enemy.GroundBehindCheck() || enemy.WallBehindCheck())
         {
             return false;
@@ -133,7 +121,6 @@ public class ArcherBattleState : ArcherState
 
         if (Time.time - enemy.lastTimeJumped >= enemy.jumpCooldown && !enemy.isKnockbacked)
         {
-            //enemy.lastTimeJumped is set in jumpState
             return true;
         }
 
@@ -146,6 +133,7 @@ public class ArcherBattleState : ArcherState
         anim.SetBool("Idle", true);
     }
 
+    //玩家在敌人的左右侧，翻转敌人的朝向以面对玩家。
     private void FacePlayer()
     {
         if (player.transform.position.x < enemy.transform.position.x)
@@ -164,4 +152,5 @@ public class ArcherBattleState : ArcherState
             }
         }
     }
+
 }

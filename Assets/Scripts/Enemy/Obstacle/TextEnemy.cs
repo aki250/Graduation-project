@@ -38,7 +38,7 @@ public class TextEnemy : Enemy
     {
         base.Start();
 
-        //初始化状态机并设置为空闲状态
+        //初始状态机为空闲状态
         stateMachine.Initialize(idleState);
     }
 
@@ -66,10 +66,10 @@ public class TextEnemy : Enemy
             }
         }
 
-        //如果有要实例化的预制件，实例化它们
-        if (prefabListToInstantiate.Count > 0)
-        {
-        }
+        ////如果有要实例化的预制件，实例化它们
+        //if (prefabListToInstantiate.Count > 0)
+        //{
+        //}
 
         // 更改状态机状态为死亡状态
         stateMachine.ChangeState(deathState);

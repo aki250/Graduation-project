@@ -362,18 +362,18 @@ public class CharacterStats : MonoBehaviour
         }
 
         //Êä³öµ±Ç°×´Ì¬
-        if (isIgnited)
-        {
-            Debug.Log($"{gameObject.name} is Ignited");
-        }
-        else if (isChilled)
-        {
-            Debug.Log($"{gameObject.name} is Chilled");
-        }
-        else if (isShocked)
-        {
-            Debug.Log($"{gameObject.name} is Shocked");
-        }
+        //if (isIgnited)
+        //{
+        //    Debug.Log($"{gameObject.name} is Ignited");
+        //}
+        //else if (isChilled)
+        //{
+        //    Debug.Log($"{gameObject.name} is Chilled");
+        //}
+        //else if (isShocked)
+        //{
+        //    Debug.Log($"{gameObject.name} is Shocked");
+        //}
     }
 
     public void ApplyShockAilment(bool _shock)

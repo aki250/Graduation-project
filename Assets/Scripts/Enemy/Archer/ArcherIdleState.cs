@@ -25,7 +25,6 @@ public class ArcherIdleState : ArcherGroundedState
     {
         base.Update();
 
-        //if enemy is already not in idleState, it's not gonna execute the remaining code
         if (stateMachine.currentState != enemy.idleState)
         {
             return;

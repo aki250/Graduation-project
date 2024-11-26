@@ -6,7 +6,8 @@ public class ArcherGroundedState : ArcherState
 {
     protected Transform player;
 
-    public ArcherGroundedState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, Archer _enemy) : base(_enemyBase, _stateMachine, _animBoolName, _enemy)
+    public ArcherGroundedState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, Archer _enemy) :
+        base(_enemyBase, _stateMachine, _animBoolName, _enemy)
     {
     }
 
@@ -26,12 +27,10 @@ public class ArcherGroundedState : ArcherState
     {
         base.Update();
 
-        //if enemy can see player inside its scan range
-        //or player is behind enemy
-        //but he's too close to the enemy
-        //enemy will hear the player's footsteps
-        //and also enter battleState
-        if ((enemy.IsPlayerDetected() || Vector2.Distance(player.position, enemy.transform.position) < enemy.playerHearDistance) && !player.GetComponent<PlayerStats>().isDead)
+        // 如果玩家处于敌人的扫描范围内,或者距离小于听觉范围playerHearDistance
+        // 并且玩家未死亡，敌人将切换到战斗状态（battleState）
+        if ((enemy.IsPlayerDetected() || Vector2.Distance(player.position, enemy.transform.position) < enemy.playerHearDistance)
+            && !player.GetComponent<PlayerStats>().isDead)
         {
             stateMachine.ChangeState(enemy.battleState);
             return;

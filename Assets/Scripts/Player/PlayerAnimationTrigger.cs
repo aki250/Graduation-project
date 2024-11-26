@@ -58,7 +58,7 @@ public class PlayerAnimationTrigger : MonoBehaviour
                 //获取敌人并暂时修改其击退运动，使其被击飞
                 Enemy _enemy = hit.GetComponent<Enemy>();
                 Vector2 originalKnockbackMovement = _enemy.knockbackMovement;
-                _enemy.knockbackMovement = new Vector2(0, 17); //设置敌人被升天
+                _enemy.knockbackMovement = new Vector2(0, 17); //敌人被升天
 
                 //获取敌人的统计数据并造成伤害
                 EnemyStats _target = hit.GetComponent<EnemyStats>();

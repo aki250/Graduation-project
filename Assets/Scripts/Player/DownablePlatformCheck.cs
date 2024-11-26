@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DownablePlatformCheck : MonoBehaviour
 {
-    private Player player;  // 声明Player变量存储玩家对象的引用
+    private Player player; 
 
     private void Start()
     {

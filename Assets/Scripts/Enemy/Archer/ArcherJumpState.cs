@@ -27,7 +27,7 @@ public class ArcherJumpState : ArcherState
 
         if (rb.velocity.y < 0 && enemy.IsGroundDetected())
         {
-            //to prevent archer from sliding after falling onto ground
+            //停止水平滑动，确保角色落地后保持静止，后切换到战斗状态
             rb.velocity = new Vector2(0, rb.velocity.y);
             stateMachine.ChangeState(enemy.battleState);
         }

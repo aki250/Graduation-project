@@ -95,7 +95,6 @@ public class DeathBringer : Enemy
 
         stateMachine.ChangeState(deathState);  //切换到死亡状态
 
-        //根据语言设置显示不同的感谢页面
         if (LanguageManager.instance.localeID == 0)  //英文
         {
             UI.instance.SwitchToThankYouForPlaying("Achieved ending - Breaking the 4th wall");
@@ -136,13 +135,11 @@ public class DeathBringer : Enemy
         Gizmos.DrawWireCube(transform.position, surroundingCheckSize);
     }
 
-    //检查是否有地面
     private RaycastHit2D HasGroundBelow()
     {
         return Physics2D.Raycast(transform.position, Vector2.down, 100, whatIsGround);  //检测下方是否有地面
     }
 
-    //检查周围是否有障碍物
     private RaycastHit2D HasSomethingSurrounded()
     {
         return Physics2D.BoxCast(transform.position, surroundingCheckSize, 0, Vector2.zero, 0, whatIsGround);  //检查周围是否有地面
@@ -154,8 +151,9 @@ public class DeathBringer : Enemy
         float x = Random.Range(teleportRegion.bounds.min.x + 3, teleportRegion.bounds.max.x - 3);  //随机选择X轴位置
         float y = Random.Range(teleportRegion.bounds.min.y + 3, teleportRegion.bounds.max.y - 3);  //随机选择Y轴位置
 
+        //调整位置使其位于地面上
         transform.position = new Vector3(x, y);
-        transform.position = new Vector3(transform.position.x, transform.position.y - HasGroundBelow().distance + (cd.size.y / 2));  // 调整位置使其位于地面上
+        transform.position = new Vector3(transform.position.x, transform.position.y - HasGroundBelow().distance + (cd.size.y / 2)); 
 
         // 如果该位置没有地面或者有障碍物，则需要重新选择位置
         if (!HasGroundBelow() || HasSomethingSurrounded())
@@ -165,66 +163,66 @@ public class DeathBringer : Enemy
         }
     }
 
-    // 判断是否可以进行传送
+    //判断是否可以进行传送
     public bool CanTeleport()
     {
         if (stage == 1)
         {
-            return false;  // 阶段1时不能传送
+            return false;  //阶段1，不能传送
         }
 
         if (Random.Range(0, 100) <= chanceToTeleport)
         {
-            return true;  // 根据传送概率决定是否传送
+            return true;  //根据传送概率决定是否传送
         }
 
         return false;
     }
 
-    // 判断是否可以施放法术
+    //判断是否可以施放法术
     public bool CanCastSpell()
     {
         if (stage == 1)
         {
-            return false;  // 阶段1时不能施放法术
+            return false;  //阶段1，不能施放法术
         }
 
         if (Time.time - lastTimeEnterSpellCastState >= spellCastStateCooldown)
         {
-            return true;  // 如果冷却时间过了，则可以施放法术
+            return true;  //如果冷却时间过了，则可以施放法术
         }
 
         return false;
     }
 
-    // 施放法术
+    //施放法术
     public void CastSpell()
     {
         Vector3 spellSpawnPosition;
 
-        // 如果玩家正在移动，法术会出现在玩家前方
+        //如果玩家正在移动，法术会出现在玩家前方
         if (player.rb.velocity.x != 0)
         {
             spellSpawnPosition = new Vector3(player.transform.position.x + player.facingDirection * 3, player.transform.position.y + 1.65f);
         }
-        // 如果玩家没有移动，法术会出现在玩家上方
+        //如果玩家没有移动，法术会出现在玩家上方
         else
         {
             spellSpawnPosition = new Vector3(player.transform.position.x, player.transform.position.y + 1.65f);
         }
 
-        // 实例化法术，并设置其属性
+        //实例化法术，并设置其属性
         GameObject newSpell = Instantiate(spellPrefab, spellSpawnPosition, Quaternion.identity);
         newSpell.GetComponent<SpellController>()?.SetupSpell(stats);
     }
 
-    // 显示Boss的名字和血量
+    //显示Boss的名字和血量
     public void ShowBossHPAndName()
     {
         bossNameAndHPUI.SetActive(true);
     }
 
-    // 关闭Boss的名字和血量UI
+    //关闭Boss名字和血量UI
     public void CloseBossHPAndName()
     {
         bossNameAndHPUI.SetActive(false);

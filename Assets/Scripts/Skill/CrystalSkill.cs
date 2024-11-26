@@ -8,18 +8,16 @@ public class CrystalSkill : Skill
 {
     [Space]
     [SerializeField] private GameObject crystalPrefab;
-    [SerializeField] private float crystalExistenceDuration;
-    private GameObject currentCrystal;
+    [SerializeField] private float crystalExistenceDuration;    //水晶存在时间
+    private GameObject currentCrystal;  //激活水晶对象
+    [SerializeField] private SkillTreeSlot_UI crystalUnlockButton;  //解锁水晶技能按钮
+    public bool crystalUnlocked { get; private set; }   //水晶是否解锁
 
-    [Header("水晶解锁")]
-    [SerializeField] private SkillTreeSlot_UI crystalUnlockButton;
-    public bool crystalUnlocked { get; private set; }
+    [Header("残影一闪解锁")]  //在传送到水晶位置时，在原始位置生成克隆体
+    [SerializeField] private SkillTreeSlot_UI mirageBlinkUnlockButton; 
+    public bool mirageBlinkUnlocked { get; private set; }   
 
-    [Header("Mirage Blink Unlock Info")]  //spawn clone on original position when teleporting to crystal position
-    [SerializeField] private SkillTreeSlot_UI mirageBlinkUnlockButton;
-    public bool mirageBlinkUnlocked { get; private set; }
-
-    [Header("Explosive Crystal Unlock Info")]
+    [Header("水晶爆炸解锁")]
     [SerializeField] private SkillTreeSlot_UI explosiveCrystalUnlockButton;
     public bool explosiveCrystalUnlocked { get; private set; }
 
@@ -31,13 +29,13 @@ public class CrystalSkill : Skill
     [Header("水晶枪解锁")]
     [SerializeField] private SkillTreeSlot_UI crystalGunUnlockButton;
     public bool crystalGunUnlocked { get; private set; }
-    [SerializeField] private int magSize;
-    [SerializeField] private float shootCooldown;  //represents crystal gun's fire rate
-    [SerializeField] private float reloadTime;
-    [SerializeField] private float shootWindow;
-    private float shootWindowTimer;
+    [SerializeField] private int magSize;   //弹匣大小
+    [SerializeField] private float shootCooldown;  //射击频率
+    [SerializeField] private float reloadTime;  //射击时间
+    [SerializeField] private float shootWindow; //射击窗口
+    private float shootWindowTimer; //水晶枪弹匣，存储水晶对象
     [SerializeField] private List<GameObject> crystalMag = new List<GameObject>();
-    private bool reloading = false;
+    private bool reloading = false; //正在重新装填子弹
 
 
     protected override void Start()
@@ -93,13 +91,13 @@ public class CrystalSkill : Skill
                 return true;
             }
 
-            //english
+            //英语
             if (LanguageManager.instance.localeID == 0)
             {
                 player.fx.CreatePopUpText("Skill is in cooldown");
 
             }
-            //chinese
+            //中文
             else if (LanguageManager.instance.localeID == 1)
             {
                 player.fx.CreatePopUpText("技能冷却中！");
@@ -109,27 +107,29 @@ public class CrystalSkill : Skill
         }
     }
 
+    //水晶技能选择
     public override void UseSkill()
     {
         base.UseSkill();
 
-        //if in crystal gun mode, disabling all single crystal functions
+        //如果水晶枪技能已解锁，禁用所有单个水晶功能
         if (crystalGunUnlocked)
         {
+            //如果水晶枪可用并成功射击
             if (ShootCrystalGunIfAvailable())
             {
-                //update the crystal skill UI Icon in skill panel
+                //更新技能面板中的水晶UI图标
                 EnterCooldown();
                 return;
             }
 
-            //english
+            //英文
             if (LanguageManager.instance.localeID == 0)
             {
                 player.fx.CreatePopUpText("Skill is in cooldown");
 
             }
-            //chinese
+            //中文
             else if (LanguageManager.instance.localeID == 1)
             {
                 player.fx.CreatePopUpText("技能冷却中！");
@@ -138,32 +138,29 @@ public class CrystalSkill : Skill
             return;
         }
 
-        //if there's no crystal yet, create crystal
+        //当前没有水晶，则创建
         if (currentCrystal == null)
         {
             CreateCrystal();
         }
         else
         {
-            //if crystal can move towards enemy,
-            //teleport function will be disabled
+            //如果水晶可以移动向敌人，那么传送功能将被禁用
             if (movingCrystalUnlocked)
             {
                 return;
             }
 
-            //spawn clone then teleport
-            //*****************************************************************
-            //***Cannot enable this when Replace Clone By Crystal is enabled***
-            //*****************************************************************
+            //若此残影一闪技能解锁
             if (mirageBlinkUnlocked)
             {
+                //玩家位置生成克隆体
                 SkillManager.instance.clone.CreateClone(player.transform.position);
                 //Destroy(currentCrystal);
                 currentCrystal.GetComponent<CrystalSkillController>()?.crystalSelfDestroy();
             }
 
-            //player teleport to the crystal's position
+            //玩家与水晶位置互换
             Vector2 playerPosition = player.transform.position;
             player.transform.position = currentCrystal.transform.position;
             currentCrystal.transform.position = playerPosition;
@@ -176,10 +173,11 @@ public class CrystalSkill : Skill
 
     public void CreateCrystal()
     {
-        //create a crystal
+        //创建水晶实例在玩家位置
         currentCrystal = Instantiate(crystalPrefab, player.transform.position, Quaternion.identity); ;
+        //获取水晶技能控制脚本
         CrystalSkillController currentCrystalScript = currentCrystal.GetComponent<CrystalSkillController>();
-
+        //获取                                         持续时间               是否爆炸                是否移动            移速          寻找最近敌人
         currentCrystalScript.SetupCrystal(crystalExistenceDuration, explosiveCrystalUnlocked, movingCrystalUnlocked, moveSpeed, FindClosestEnemy(currentCrystal.transform));
     }
 
@@ -196,7 +194,7 @@ public class CrystalSkill : Skill
     private IEnumerator ReloadCrystalMag_Coroutine()
     {
         reloading = true;
-        EnterCooldown();
+        EnterCooldown();    //装填，则进CD
 
         yield return new WaitForSeconds(reloadTime);
 
@@ -211,8 +209,10 @@ public class CrystalSkill : Skill
             return;
         }
 
+        //计算需要添加的弹药数量，即弹匣大小减去当前弹药数量
         int ammoToAdd = magSize - crystalMag.Count;
 
+        // 添加弹药到弹匣
         for (int i = 0; i < ammoToAdd; i++)
         {
             crystalMag.Add(crystalPrefab);
@@ -221,35 +221,43 @@ public class CrystalSkill : Skill
 
     private bool ShootCrystalGunIfAvailable()
     {
+        //水晶枪不在装填状态
         if (crystalGunUnlocked && !reloading)
         {
+            //且有子弹
             if (crystalMag.Count > 0)
             {
+                //取出弹匣中的最后一个水晶
                 GameObject crystalToSpawn = crystalMag[crystalMag.Count - 1];
-                GameObject newCrystal = Instantiate(crystalToSpawn, player.transform.position, Quaternion.identity); ;
+                //实例化水晶
+                GameObject newCrystal = Instantiate(crystalToSpawn, player.transform.position, Quaternion.identity);
 
+                //从弹匣中移除已使用的水晶
                 crystalMag.Remove(crystalToSpawn);
 
-                newCrystal.GetComponent<CrystalSkillController>()?.
+                //设置新水晶属性
+                newCrystal.GetComponent<CrystalSkillController>().
                     SetupCrystal(crystalExistenceDuration, explosiveCrystalUnlocked, movingCrystalUnlocked, moveSpeed, FindClosestEnemy(newCrystal.transform));
 
-
+                //重置射击窗口计时器
                 shootWindowTimer = shootWindow;
 
+                //如果弹匣为空，则开始重新装填
                 if (crystalMag.Count <= 0)
                 {
                     ReloadCrystalMag();
                 }
             }
 
-            return true;
+            return true;    //成功射击
         }
 
-        return false;
+        return false;   //失败
     }
 
     public void DestroyCurrentCrystal_InCrystalMirageOnly()
     {
+        //如果当前水晶不为空，则销毁
         if (currentCrystal != null)
         {
             Destroy(currentCrystal);
@@ -258,6 +266,7 @@ public class CrystalSkill : Skill
 
     public void CurrentCrystalSpecifyEnemy(Transform _enemy)
     {
+        //如果当前水晶不为空，则指定敌人为目标
         if (currentCrystal != null)
         {
             currentCrystal.GetComponent<CrystalSkillController>()?.SpecifyEnemyTarget(_enemy);
@@ -266,61 +275,64 @@ public class CrystalSkill : Skill
 
     public void EnterCooldown()
     {
+        //如果冷却计时器<0且未解锁水晶枪，设置冷却图像
         if (cooldownTimer < 0 && !crystalGunUnlocked)
         {
             InGame_UI.instance.SetCrystalCooldownImage();
             cooldownTimer = cooldown;
         }
-        else if (cooldownTimer < 0 && crystalGunUnlocked)
+        else if (cooldownTimer < 0 && crystalGunUnlocked)   //如果冷却计时器小于0且已解锁水晶枪，设置冷却图像,并获取水晶枪冷却时间
         {
             InGame_UI.instance.SetCrystalCooldownImage();
             cooldownTimer = GetCrystalCooldown();
         }
 
-        skillLastUseTime = Time.time;
+        skillLastUseTime = Time.time;   //记录技能最后一次使用时间
     }
 
     public float GetCrystalCooldown()
     {
-        //if crystal gun is not unlocked, cooldown should be the default cooldown
+        //如果未解锁水晶枪，冷却时间为默认冷却时间
         float crystalCooldown = cooldown;
 
-        //if crystal gun is unlocked
         if (crystalGunUnlocked)
         {
             if (shootWindowTimer > 0)
             {
-                //when shootable, cooldown should be the fire interval
+                //如果射击窗口计时器大于0，冷却时间为射击间隔
                 crystalCooldown = shootCooldown;
             }
 
             if (reloading)
             {
-                //when reloading, cooldown should be the crystal gun reload time
+                //如果正在重新装填，冷却时间为水晶枪重新装填时间
                 crystalCooldown = reloadTime;
             }
         }
 
-        return crystalCooldown;
+        return crystalCooldown; //返回水晶冷却时间
     }
 
     public override bool SkillIsReadyToUse()
     {
+        //如果已解锁水晶枪
         if (crystalGunUnlocked)
         {
+            //如果不在重新装填状态，技能准备好可以使用
             if (!reloading)
             {
                 return true;
             }
-            return false;
+            return false; //否则，技能未准备好
         }
         else
         {
+            //如果冷却计时器小于0，技能准备好可以使用
             if (cooldownTimer < 0)
             {
                 return true;
             }
-            return false;
+            return false; //否则，技能未准备好
         }
     }
 

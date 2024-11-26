@@ -71,7 +71,7 @@ public class SwordSkill : Skill
         //生成瞄准点
         GenerateDots();
 
-        // 设置各技能解锁按钮的监听事件
+        //各技能解锁按钮的监听事件
         throwSwordSkillUnlockButton.GetComponent<Button>()?.onClick.AddListener(UnlockThrowSwordSkill);
         bounceSwordUnlockButton.GetComponent<Button>()?.onClick.AddListener(UnlockBounceSword);
         pierceSwordUnlockButton.GetComponent<Button>()?.onClick.AddListener(UnlockPierceSword);
@@ -99,6 +99,7 @@ public class SwordSkill : Skill
                 }
             }
         }
+
     }
 
     //创建投掷剑
@@ -210,15 +211,18 @@ public class SwordSkill : Skill
     //解锁投掷剑技能
     private void UnlockThrowSwordSkill()
     {
+
         if (throwSwordSkillUnlocked)
         {
+            throwSwordSkillUnlocked = false; //重置解锁状态
+            swordType = SwordType.Regular; //恢复普通剑
             return;
         }
 
         if (throwSwordSkillUnlockButton.unlocked)
         {
             throwSwordSkillUnlocked = true;
-            swordType = SwordType.Regular;  //默认使用普通剑
+            swordType = SwordType.Regular;  //默认普通剑
         }
     }
 
@@ -227,6 +231,8 @@ public class SwordSkill : Skill
     {
         if (bounceSwordUnlocked)
         {
+            bounceSwordUnlocked = false; //重置解锁状态
+            swordType = SwordType.Regular; //恢复默认普通剑
             return;
         }
 
@@ -242,6 +248,9 @@ public class SwordSkill : Skill
     {
         if (pierceSwordUnlocked)
         {
+            pierceSwordUnlocked = false;
+            swordType = SwordType.Regular;
+            //Debug.Log("Pierce Sword Skill has been unlearned.");
             return;
         }
 
@@ -257,6 +266,8 @@ public class SwordSkill : Skill
     {
         if (spinSwordUnlocked)
         {
+            spinSwordUnlocked = false;
+            swordType = SwordType.Regular;
             return;
         }
 
@@ -272,6 +283,7 @@ public class SwordSkill : Skill
     {
         if (timeStopUnlocked)
         {
+            timeStopUnlocked = false;
             return;
         }
 
@@ -286,6 +298,7 @@ public class SwordSkill : Skill
     {
         if (vulnerabilityUnlocked)
         {
+            vulnerabilityUnlocked = false;
             return;
         }
 

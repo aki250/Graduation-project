@@ -114,7 +114,7 @@ public class KeybindOptionController : MonoBehaviour
     //按键绑定按钮被点击时，开始执行按键更改的过程。
     public void ChangeKeybind()
     {
-        // 启动协程来等待用户输入新的按键
+                                        //启动协程来等待用户输入新的按键
         StartCoroutine(ChangeKeybindInput());
     }
 

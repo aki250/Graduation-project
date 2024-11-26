@@ -15,11 +15,11 @@ public class DeathBringerDeathState : DeathBringerState
 
         enemy.anim.SetBool(enemy.lastAnimBoolName, true);
         enemy.anim.speed = 0;
-        enemy.cd.enabled = false;
+        enemy.cd.enabled = false;   //禁用碰撞器，防止死亡时的交互
 
-        stateTimer = 0.1f;
+        stateTimer = 0.1f;  //初始化状态计时器
 
-        enemy.CloseBossHPAndName();
+        enemy.CloseBossHPAndName(); //关闭Boss生命值和名称显示
     }
 
     public override void Exit()
@@ -31,7 +31,7 @@ public class DeathBringerDeathState : DeathBringerState
     {
         base.Update();
 
-        //enemy is gonna fly up before he dies
+        //状态计时器大于0且死亡使者可以飞起
         if (stateTimer > 0 && canBeFliedUP)
         {
             enemy.SetVelocity(0, 10);

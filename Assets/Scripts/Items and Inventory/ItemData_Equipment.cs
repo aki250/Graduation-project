@@ -94,30 +94,6 @@ public class ItemData_Equipment : ItemData
         playerStats.lightningDamage.RemoveModifier(lightningDamage);
     }
 
-    //will be triggerd in scripts like animationTrigger when attacking enemies
-    //private void ExecuteItemEffect(Transform _spawnTransform)
-    //{
-    //    foreach (var effect in itemEffects)
-    //    {
-    //        effect.ExecuteEffect(_spawnTransform);
-    //    }
-    //}
-
-    //public void ExecuteItemEffect_NoHitNeeded()
-    //{
-    //    foreach (var effect in itemEffects)
-    //    {
-    //        effect.ExecuteEffect_NoHitNeeded();
-    //    }
-    //}
-
-    //private void ReleaseSwordArcane()
-    //{
-    //    foreach (var effect in itemEffects)
-    //    {
-    //        effect.ReleaseSwordArcane();
-    //    }
-    //}
 
     public void RefreshUseState()
     {
@@ -153,19 +129,15 @@ public class ItemData_Equipment : ItemData
                 //更新统计信息 UI（例如生命、法力、攻击力等）
                 Inventory.instance.UpdateStatUI();
 
-                Debug.Log($"Use Item Effect: {effect.name}");
+               //Debug.Log($"Use Item Effect: {effect.name}");
             }
-            else
-            {
-                //如果效果在冷却中，输出冷却提示（一般都不需要，玩家又不是瞎子
-                Debug.Log("Item Effect is in cooldown");
-            }
+
         }
     }
 
     public void ReleaseSwordArcane_ConsiderCooldown()
     {
-        // 这里使用 >= 目的是防止在多个 0 冷却时间效果需要同时执行时
+        //这里使用 >= 目的是防止在多个 0 冷却时间效果需要同时执行时
         //但第一个效果后的所有效果都会进入冷却
         foreach (var effect in itemEffects)
         {
@@ -178,21 +150,18 @@ public class ItemData_Equipment : ItemData
                 effect.effectLastUseTime = Time.time; //更新效果上次使用时间
                 effect.effectUsed = true; //标记效果已被使用
                 Inventory.instance.UpdateStatUI(); //更新物品状态UI
-                Debug.Log($"Use Sword Arcane: {effect.name}"); //输出调试信息
+               // Debug.Log($"Use Sword Arcane: {effect.name}"); 
             }
-            else
-            {
-                Debug.Log("Item Effect is in cooldown"); //输出调试信息：效果正在冷却中
-            }
+
         }
     }
 
     public override string GetItemStatInfoAndEffectDescription()
     {
-        sb.Length = 0; // 清空 StringBuilder
-        statInfoLength = 0; // 重置统计信息的行数
+        sb.Length = 0; //清空StringBuilder
+        statInfoLength = 0; //重置统计信息的行数
 
-        // 添加各项属性信息
+        //添加各项属性信息
         AddItemStatInfo(strength, "Strength");
         AddItemStatInfo(agility, "Agility");
         AddItemStatInfo(intelligence, "Intelligence");
@@ -211,17 +180,17 @@ public class ItemData_Equipment : ItemData
         AddItemStatInfo(iceDamage, "Ice Dmg");
         AddItemStatInfo(lightningDamage, "Lightning Dmg");
 
-        // 如果有物品效果并且有属性信息
+        //如果有物品效果并且有属性信息
         if (itemEffects.Length > 0 && statInfoLength > 0)
         {
-            // 如果第一个效果有描述信息，添加空行分隔属性信息和效果描述
+            //如果第一个效果有描述信息，添加空行分隔属性信息和效果描述
             if (itemEffects[0].effectDescription.Length > 0)
             {
                 sb.AppendLine();
             }
         }
 
-        // 遍历所有物品效果，添加效果描述
+        //遍历所有物品效果，添加效果描述
         for (int i = 0; i < itemEffects.Length; i++)
         {
             sb.AppendLine();
@@ -244,7 +213,7 @@ public class ItemData_Equipment : ItemData
             statInfoLength++; //增加属性信息的行数
         }
 
-        // 确保“固有效果”下面的空行与属性信息下方的空行一致
+        //确保“固有效果”下面的空行与属性信息下方的空行一致
         if (sb.ToString()[sb.Length - 1] == '\n')
         {
             sb.Remove(sb.Length - 1, 1); // 移除末尾的换行符
@@ -266,16 +235,16 @@ public class ItemData_Equipment : ItemData
         //}
 
         sb.AppendLine();
-        sb.Append(""); // 添加空行
+        sb.Append(""); 
         sb.AppendLine();
-        sb.Append(""); // 添加空行
+        sb.Append(""); 
 
-        return sb.ToString(); // 返回最终的字符串
+        return sb.ToString(); //返回最终的字符串
     }
 
     private void AddItemStatInfo(int _statValue, string _statName)
     {
-        // 如果属性值不为 0，添加属性信息
+        //如果属性值不为0，添加属性信息
         if (_statValue != 0)
         {
             if (sb.Length > 0)

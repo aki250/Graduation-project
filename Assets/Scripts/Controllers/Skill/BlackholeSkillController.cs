@@ -102,7 +102,7 @@ public class BlackholeSkillController : MonoBehaviour
     {
         if (collision.GetComponent<Enemy>() != null)
         {
-            collision.GetComponent<Enemy>().FreezeEnemy(false);
+            collision.GetComponent<Enemy>().FreezeEnemy(false); //接触敌人冻结状态
         }
     }
 
@@ -115,8 +115,7 @@ public class BlackholeSkillController : MonoBehaviour
         cloneAttackCooldown = _cloneAttackCooldown;
         QTEInputTimer = _QTEInputWindow;
 
-        //player won't be transparent
-        //if Replace Clone By Crystal is enabled in Clone Skill
+        //如果技能管理器中克隆技能解锁了分支技能，水晶替代克隆，则玩家会变得透明
         if (SkillManager.instance.clone.crystalMirageUnlocked)
         {
             playerIsTransparent = true;
@@ -127,47 +126,47 @@ public class BlackholeSkillController : MonoBehaviour
     {
         DestroyHotkeys();
         canCloneAttack = true;
-        canCreateHotkey = false;  //can't add enemy to QTE list after releasing clone attack
+        canCreateHotkey = false; //禁止在释放克隆攻击后，添加敌人到QTE列表
 
-        //make player transparent when releasing clone attack
+        //飞升后，玩家透明化
         if (!playerIsTransparent)
         {
-            PlayerManager.instance.player.fx.MakeEntityTransparent(true);
+            PlayerManager.instance.player.fx.MakeEntityTransparent(true);   
             playerIsTransparent = true;
         }
-        //player will become visible again when exiting blackhole skill state
+        //退出黑洞技能则自动恢复
     }
 
     private void BlackholeCloneAttack()
-    {
+    {   //攻击机计时器还在、开了黑洞克隆攻击、还有攻击次数、仍有锁定的敌人，
         if (cloneAttackTimer < 0 && canCloneAttack && cloneAttackAmount > 0 && enemyTargets.Count > 0)
         {
-            cloneAttackTimer = cloneAttackCooldown;
+            cloneAttackTimer = cloneAttackCooldown; //重置攻击计时器
 
-            int randomIndex = Random.Range(0, enemyTargets.Count);
+            int randomIndex = Random.Range(0, enemyTargets.Count);  //随机选择目标敌人
+
 
             Vector3 offset;
-            //make clone spawn next to the enemy with a bit offset
             if (Random.Range(0, 100) > 50)
             {
-                offset = new Vector3(1, 0);
+                offset = new Vector3(1, 0); //右侧生成
             }
             else
             {
-                offset = new Vector3(-1, 0);
+                offset = new Vector3(-1, 0);    //左
             }
 
-            //if Replace Clone By Crystal is enabled in Clone Skill
-            //Create Crystal instead of Clone
+            //技能学习水晶幻影
             if (SkillManager.instance.clone.crystalMirageUnlocked)
             {
                 SkillManager.instance.crystal.CreateCrystal();
 
-                //ranomly select enemy inside the blackhole range
+                //随机选择一个在黑洞范围内的敌人
                 SkillManager.instance.crystal.CurrentCrystalSpecifyEnemy(enemyTargets[randomIndex]);
             }
             else
             {
+                //在随机选择的敌人位置加上偏移量处创建克隆
                 SkillManager.instance.clone.CreateClone(enemyTargets[randomIndex].position + offset);
             }
 
@@ -182,6 +181,7 @@ public class BlackholeSkillController : MonoBehaviour
 
     private void EndCloneAttack()
     {
+        //删热键，关技能，缩黑洞，关攻击
         DestroyHotkeys();
         canExitBlackHoleSkill = true;
         canShrink = true;
@@ -192,33 +192,32 @@ public class BlackholeSkillController : MonoBehaviour
         //快捷键列表为空，无法为新的敌人生成快捷键
         if (hotkeyList.Count <= 0)
         {
-            Debug.Log("No enough available hotkeys in list"); //打印调试信息，提示快捷键列表不足
+            Debug.Log("No enough available hotkeys in list"); //提示快捷键列表不足
             return; 
         }
 
-        // 如果克隆攻击已经释放，则禁止为新的敌人生成快捷键
+        //克隆攻击已经释放，则禁止为新的敌人生成快捷键
         if (!canCreateHotkey)
         {
-            return; // 直接退出方法，不允许添加额外的 QTE 敌人
+            return; 
         }
 
         //创建一个新的快捷键对象，位置在敌人上方（偏移量为 +2 的位置）
         GameObject newHotkey = Instantiate(
-            hotkeyPrefab, // 预制件
+            hotkeyPrefab, //预制件
             collision.transform.position + new Vector3(0, 2), //位置设置为敌人当前位置的上方
             Quaternion.identity //停止旋转
         );
 
-        // 将生成的快捷键对象加入已创建的快捷键列表
-        createdHotkey.Add(newHotkey);
+        createdHotkey.Add(newHotkey);   //将生成的快捷键对象加入已创建的快捷键列表
 
         // 获取新生成快捷键对象的控制脚本
         Blackhole_HotkeyController newHotkeyScript = newHotkey.GetComponent<Blackhole_HotkeyController>();
 
-        // 从快捷键列表中随机选择一个按键作为快捷键
+        //从快捷键列表中随机选择一个按键作为快捷键
         KeyCode chosenKey = hotkeyList[Random.Range(0, hotkeyList.Count)];
 
-        // 从可用快捷键列表中移除已选择的快捷键，避免重复使用
+        //从可用快捷键列表中移除已选择的快捷键，避免重复使用
         hotkeyList.Remove(chosenKey);
 
         // 配置快捷键对象：

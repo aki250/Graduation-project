@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Archer : Enemy
 {
-    [Header("弓箭手规格")]
+    [Header("弓箭手")]
     [SerializeField] private GameObject arrowPrefab;  //弓箭手射出的箭矢预设体
     public Vector2 jumpVelocity;  //弓箭手跳跃的初始速度
     public float jumpCooldown;  //跳跃的冷却时间
-    public float jumpJudgeDistance; //玩家离弓箭手的距离，当玩家距离足够近时，弓箭手会选择跳跃
+    public float jumpJudgeDistance; //玩家离弓箭手的距离，当玩家距离足够近时，弓箭手会选择跳跃远离
     public float lastTimeJumped { get; set; }  //上次跳跃的时间
     [SerializeField] private float arrowFlySpeed;  //箭矢飞行的速度
 

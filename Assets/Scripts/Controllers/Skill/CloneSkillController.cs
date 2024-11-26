@@ -55,7 +55,7 @@ public class CloneSkillController : MonoBehaviour
             anim.SetInteger("AttackNumber", Random.Range(1, 4));
         }
 
-        //克隆的持续时间、消失速度、敌人、克隆副本生成的可能性等参数
+        //克隆的持续时间、消失速度
         cloneDuration = _cloneDuration;
         colorLosingSpeed = _colorLosingSpeed;
         cloneTimer = cloneDuration;  //设置克隆计时器为克隆持续时间
@@ -80,10 +80,10 @@ public class CloneSkillController : MonoBehaviour
     private void AttackTrigger()
     {
         //如果学会了激进的幻象技能，克隆攻击时也会应用击中效果
-        if (SkillManager.instance.clone.aggressiveCloneCanApplyOnHitEffect)
-        {
-            Inventory.instance.ReleaseSwordArcane_ConsiderCooldown();  //释放剑的奥术技能（如果有的话）
-        }
+        //if (SkillManager.instance.clone.aggressiveCloneCanApplyOnHitEffect)
+        //{
+        //    Inventory.instance.ReleaseSwordArcane_ConsiderCooldown();  //释放剑的奥术技能（如果有的话）
+        //}
 
         //检测攻击范围内的所有碰撞体（敌人）
         Collider2D[] colliders = Physics2D.OverlapCircleAll(attackCheck.position, attackCheckRadius);

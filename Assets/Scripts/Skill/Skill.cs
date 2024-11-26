@@ -73,30 +73,28 @@ public class Skill : MonoBehaviour
         return false;
     }
 
-    //执行技能的具体操作（子类可以重写）
     public virtual void UseSkill()
     {
-
     }
 
-    // 寻找最近的敌人
+    //寻找最近的敌人
     protected virtual Transform FindClosestEnemy(Transform _searchCenter)
     {
         Transform closestEnemy = null;
 
-        // 在搜索半径内查找所有敌人
+        //在搜索半径内查找所有敌人
         Collider2D[] colliders = Physics2D.OverlapCircleAll(_searchCenter.position, 12);
 
-        float closestDistanceToEnemy = Mathf.Infinity;  // 最近敌人距离
+        float closestDistanceToEnemy = Mathf.Infinity;  //最近敌人距离
 
-        // 寻找最近的敌人
+        //寻找最近的敌人
         foreach (var hit in colliders)
         {
-            if (hit.GetComponent<Enemy>() != null)  // 确保目标是敌人
+            if (hit.GetComponent<Enemy>() != null)  //确保目标是敌人
             {
                 float currentDistanceToEnemy = Vector2.Distance(_searchCenter.position, hit.transform.position);
 
-                // 如果当前敌人的距离更近，则更新
+                //如果当前敌人的距离更近，则更新
                 if (currentDistanceToEnemy < closestDistanceToEnemy)
                 {
                     closestDistanceToEnemy = currentDistanceToEnemy;
@@ -108,25 +106,25 @@ public class Skill : MonoBehaviour
         return closestEnemy;
     }
 
-    // 从搜索半径内随机选择一个敌人
+    //从搜索半径内随机选择一个敌人
     protected virtual Transform ChooseRandomEnemy(Transform _searchCenter, float _targetSearchRadius)
     {
         Transform targetEnemy = null;
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _targetSearchRadius);
 
-        // 查找半径内的敌人
+        //查找半径内的敌人
         List<Transform> enemies = new List<Transform>();
 
         foreach (var hit in colliders)
         {
-            if (hit.GetComponent<Enemy>() != null)  // 确保目标是敌人
+            if (hit.GetComponent<Enemy>() != null)  //确保目标是敌人
             {
                 enemies.Add(hit.transform);
             }
         }
 
-        // 如果找到敌人，则随机选择一个作为目标
+        //如果找到敌人，则随机选择一个作为目标
         if (enemies.Count > 0)
         {
             targetEnemy = enemies[Random.Range(0, enemies.Count)];

@@ -41,7 +41,7 @@ public class DeathBringerBattleState : DeathBringerState
     {
         base.Exit();
 
-        AudioManager.instance.StopSFX(24);  //停止退出状态时的音效
+       // AudioManager.instance.StopSFX(24);  //停止退出状态时的音效
     }
 
     public override void Update()
@@ -60,7 +60,7 @@ public class DeathBringerBattleState : DeathBringerState
         //如果敌人检测到玩家
         if (enemy.IsPlayerDetected())
         {
-            // 重置状态计时器为激进时间
+            //重置状态计时器为激进时间
             stateTimer = enemy.aggressiveTime;
 
             //玩家在攻击范围内，尝试攻击
@@ -77,7 +77,6 @@ public class DeathBringerBattleState : DeathBringerState
         }
         else  //敌人没有看到玩家
         {
-            //玩家在一段时间内一直不在敌人视野内，切换到待机状态（脱战）
             if (stateTimer < 0)
             {
                 stateMachine.ChangeState(enemy.idleState);
@@ -89,11 +88,11 @@ public class DeathBringerBattleState : DeathBringerState
         if (enemy.IsPlayerDetected() && Vector2.Distance(enemy.transform.position, player.transform.position) < enemy.attackDistance)
         {
             ChangeToIdleAnimation(); //如果太近，切换到待机动画
-            enemy.SetVelocity(0, rb.velocity.y); // 停止水平方向的移动
+            enemy.SetVelocity(0, rb.velocity.y); //停止水平方向的移动
             return;
         }
 
-        // 根据玩家的位置判断敌人移动的方向
+        //根据玩家的位置判断敌人移动的方向
         if (player.position.x > enemy.transform.position.x)
         {
             moveDirection = 1; //向右移动
@@ -111,7 +110,7 @@ public class DeathBringerBattleState : DeathBringerState
             return;
         }
 
-        // 根据设定的战斗移动速度朝玩家移动
+        //根据设定的战斗移动速度朝玩家移动
         enemy.SetVelocity(enemy.battleMoveSpeed * moveDirection, rb.velocity.y);
         ChangeToMoveAnimation();
     }

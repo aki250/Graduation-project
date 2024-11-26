@@ -11,19 +11,14 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     //绑定名称列表，用于描述技能与特定行为的绑定关系
     [SerializeField] private List<string> boundBehaveNameList;
 
-    //英文描述部分
     [Header("英文")]
-    //技能名称英文
     [SerializeField] private string skillName;
-    //技能描述英文
+
     [TextArea]
     [SerializeField] private string skillDescription;
 
-    //中文描述部分
     [Header("中文")]
-    //技能名称中文
     [SerializeField] private string skillName_Chinese;
-    //技能描述中文
     [TextArea]
     [SerializeField] private string skillDescription_Chinese;
 
@@ -74,13 +69,29 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
     }
 
-
     public void UnlockSkill()
     {
+        //if (unlocked)
+        //{
+        //    //取消技能
+        //    unlocked = false; //标记为未解锁
+        //    skillImage.color = lockedSkillColor; //更新图标为锁定颜色
+        //    Debug.Log($"技能已取消学习: {skillName}");
+
+        //    //如果有前置技能依赖本技能，需要锁定它们
+        //    foreach (var dependentSkill in shouldBeUnlocked)
+        //    {
+        //        if (dependentSkill.unlocked)
+        //        {
+        //            dependentSkill.UnlockSkill(); //递归锁定依赖技能
+        //        }
+        //    }
+        //    return;
+        //}
+
         //检查前置技能是否已解锁
         for (int i = 0; i < shouldBeUnlocked.Length; i++)
         {
-            //任何一个前置技能未解锁，则打印提示并返回
             if (shouldBeUnlocked[i].unlocked == false)
             {
                 Debug.Log("前置技能尚未解锁！");
@@ -88,7 +99,7 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             }
         }
 
-        //检查是否有互斥技能已解锁
+        // 检查是否有互斥技能已解锁
         for (int i = 0; i < shouldBeLocked.Length; i++)
         {
             if (shouldBeLocked[i].unlocked == true)
@@ -98,23 +109,18 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             }
         }
 
-        //确保技能没有重复解锁
-        if (unlocked)
+        // 检查玩家货币支付技能费用
+        if (PlayerManager.instance.BuyIfAvailable(skillPrice) == false)
         {
-            Debug.Log("您已经解锁过该技能！");
             return;
         }
 
-        //检查玩家货币支付技能费用
-        if (PlayerManager.instance.BuyIfAvailable(skillPrice) == false)
-        {
-            return; 
-        }
-
-        unlocked = true; //将技能标记为已解锁
-        skillImage.color = Color.white; //更新图标颜色
+        // 解锁技能
+        unlocked = true; // 标记为已解锁
+        skillImage.color = Color.white; // 更新图标颜色为已解锁
         Debug.Log($"成功解锁技能: {skillName}");
     }
+
 
     //自定义按键
     private string AddBehaveKeybindNameToDescription(string _skillDescription)
@@ -122,13 +128,13 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         //遍历绑定行为名称列表，替换技能描述中的占位符
         for (int i = 0; i < boundBehaveNameList.Count; i++)
         {
-            // 如果技能描述中包含对应的占位符（BehaveName0、BehaveName1 等）
+            // 如果技能描述中包含对应的占位符
             if (_skillDescription.Contains($"BehaveName{i}"))
             {
-                //获取对应行为名称的按键绑定（通过行为名称从字典中获取）
+                //获取对应行为名称的按键绑定
                 string _keybindName = KeyBindManager.instance.keybindsDictionary[boundBehaveNameList[i]].ToString();
 
-                //标准化按键绑定名称（例如：将"Mouse0"转换为"LMB"等）
+                //标准化按键绑定名称
                 _keybindName = KeyBindManager.instance.UniformKeybindName(_keybindName);
 
                 //将技能描述中的占位符替换为对应的按键绑定名称

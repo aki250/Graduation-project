@@ -125,36 +125,32 @@ public class SwordSkillController : MonoBehaviour
     //碰撞到的敌人挂上冻结、脆弱状态
     private void DamageAndFreezeAndVulnerateEnemy(Collider2D collision)
     {
-        if (collision.GetComponent<Enemy>() != null)
+        Enemy enemy = collision.GetComponent<Enemy>();
+        if ( enemy == null)
         {
-            Enemy enemy = collision.GetComponent<Enemy>();
-
-            //对敌人造成伤害
-            player.stats.DoDamge(enemy.GetComponent<CharacterStats>());
-
-            //如果解锁冻结技能，冻结敌人
-            if (SkillManager.instance.sword.timeStopUnlocked)
-            {
-                enemy.FreezeEnemyForTime(enemyFreezeDuration);
-
-            }
-
-            //如果解锁脆弱技能，使敌人进入脆弱状态
-            if (SkillManager.instance.sword.vulnerabilityUnlocked)
-            {
-                //Debug.Log($"Enemy {enemy.gameObject.name} is vulnerable");
-                enemy.stats.BecomeVulnerableForTime(enemyVulnerableDuration);
-            }
-
-            //summon charm effect
-            Inventory.instance.UseCharmEffect_ConsiderCooldown(enemy.transform);
-            //ItemData_Equipment equippedCharm = Inventory.instance.GetEquippedEquipmentByType(EquipmentType.Charm);
-
-            //if (equippedCharm != null)
-            //{
-            //    equippedCharm.ExecuteItemEffect(enemy.transform);
-            //}
+            return;
         }
+
+        //对敌人造成伤害
+        player.stats.DoDamge(enemy.GetComponent<CharacterStats>());
+
+        //如果解锁冻结时间被动，冻结敌人
+        if (SkillManager.instance.sword.timeStopUnlocked)
+        {
+            enemy.FreezeEnemyForTime(enemyFreezeDuration);
+
+        }
+
+        //如果解锁脆弱技能，使敌人进入脆弱状态
+        if (SkillManager.instance.sword.vulnerabilityUnlocked)
+        {
+            enemy.stats.BecomeVulnerableForTime(enemyVulnerableDuration);
+        }
+
+        //执行护符效果
+        Inventory.instance.UseCharmEffect_ConsiderCooldown(enemy.transform);
+
+        
 
     }
 
@@ -215,6 +211,7 @@ public class SwordSkillController : MonoBehaviour
             {
 
                 DamageAndFreezeAndVulnerateEnemy(bounceTargets[bounceTargetIndex].GetComponent<Collider2D>());
+
                 //增加索引，减少弹跳次数
                 bounceTargetIndex++;
                 bounceAmount--;
@@ -254,7 +251,7 @@ public class SwordSkillController : MonoBehaviour
                 }
             }
 
-            //// 根据与玩家的距离对弹跳目标列表进行排序
+            //根据与玩家的距离对弹跳目标列表进行排序
             bounceTargets.Sort(new SortByDistanceToPlayer_BounceSwordTargets());
         }
     }
@@ -314,7 +311,7 @@ public class SwordSkillController : MonoBehaviour
 
         swordReturnSpeed = _swordReturnSpeed; //剑返回时速度
 
-        enemyFreezeDuration = _enemyFreezeDuration;//敌人被冻结的持续时间
+        enemyFreezeDuration = _enemyFreezeDuration; //敌人被冻结的持续时间
 
         enemyVulnerableDuration = _enemyVulnerableDuration; //设置敌人被脆弱化的持续时间
 

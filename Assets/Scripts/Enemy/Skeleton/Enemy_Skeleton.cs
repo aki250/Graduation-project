@@ -6,11 +6,11 @@ public class Enemy_Skeleton : Enemy
 {
     #region States
     //÷¼÷ÃµÐÈË×´Ì¬
-    public SkeletonIdleState idleState { get; private set; }    //´ý»ú×´Ì¬
-    public SkeletonMoveState moveState { get; private set; }    //ÒÆ¶¯×´Ì¬
-    public SkeletonBattleState battleState { get; private set; }    //Õ½¶·×´Ì¬
-    public SkeletonAttackState attackState { get; private set; }    //¹¥»÷×´Ì¬
-    public SkeletonStunnedState stunnedState { get; private set; }  //Ñ£ÔÎ×´Ì¬
+    public SkeletonIdleState idleState { get; private set; }    //´ý»ú
+    public SkeletonMoveState moveState { get; private set; }    //ÒÆ¶¯
+    public SkeletonBattleState battleState { get; private set; }    //Õ½¶·
+    public SkeletonAttackState attackState { get; private set; }    //¹¥»÷
+    public SkeletonStunnedState stunnedState { get; private set; }  //Ñ£ÔÎ
     public SkeletonDeathState deathState { get; private set; }  //ËÀÍö×´Ì¬
     #endregion
 

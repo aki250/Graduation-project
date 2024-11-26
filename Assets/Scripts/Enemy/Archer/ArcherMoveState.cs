@@ -28,15 +28,14 @@ public class ArcherMoveState : ArcherGroundedState
             return;
         }
 
-        //AudioManager.instance.PlaySFX(24, enemy.transform);
-        //AudioManager.instance.PlaySFX(14, enemy.transform);
 
+        //检测前方有墙体或  失去地面支撑，如果检测到墙体或悬空，切换为待机状态
         if (enemy.IsWallDetected() || !enemy.IsGroundDetected())
         {
             stateMachine.ChangeState(enemy.idleState);
             return;
         }
-
+        //弓箭手的水平移动速度，使其沿当前面朝方向移动
         enemy.SetVelocity(enemy.patrolMoveSpeed * enemy.facingDirection, rb.velocity.y);
     }
 }

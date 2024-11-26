@@ -45,7 +45,7 @@ public class Arrow_Controller : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("箭与 " + collision.gameObject.name + " 碰撞");
+        //Debug.Log("箭与 " + collision.gameObject.name + " 碰撞");
 
         //如果箭击中了玩家
         if (collision.gameObject.layer == LayerMask.NameToLayer(targetLayerName))
