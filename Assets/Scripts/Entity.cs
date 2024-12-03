@@ -4,7 +4,7 @@ using UnityEngine;
                                         //Entity 类是游戏中实体的基础类，提供了碰撞检测、攻击检测、击退效果等通用功能
 public class Entity : MonoBehaviour
 {
-    [Header("Collision Info")]
+    [Header("墙壁检测")]
     [SerializeField] protected Transform groundCheck; //地面检测的Transform组件
     [SerializeField] protected float groundCheckDistance = 1; //地面检测距离
     [SerializeField] protected Transform wallCheck; //墙壁检测的Transform组件
@@ -14,7 +14,7 @@ public class Entity : MonoBehaviour
     public Transform attackCheck; //攻击检测组件
     public float attackCheckRadius = 1.2f; //攻击检测半径
 
-    [Header("Knockback Info")]
+    [Header("击退检测")]
     public Vector2 knockbackMovement = new Vector2(5, 3); //击退移动的初始值
     public Vector2 randomKnockbackMovementOffsetRange; //击退移动的随机偏移范围
     [SerializeField] protected float knockbackDuration = 0.2f; //击退持续时间
@@ -35,11 +35,11 @@ public class Entity : MonoBehaviour
 
     protected virtual void Awake()
     {
-        sr = GetComponentInChildren<SpriteRenderer>();
-        anim = GetComponentInChildren<Animator>(); 
-        rb = GetComponent<Rigidbody2D>(); 
-        stats = GetComponent<CharacterStats>(); 
-        cd = GetComponent<CapsuleCollider2D>();
+        sr = GetComponentInChildren<SpriteRenderer>();  //角色图像
+        anim = GetComponentInChildren<Animator>();  //动画
+        rb = GetComponent<Rigidbody2D>();   //物理组件
+        stats = GetComponent<CharacterStats>();     //状态数据
+        cd = GetComponent<CapsuleCollider2D>(); //碰撞体
     }
 
     protected virtual void Start()
@@ -123,8 +123,8 @@ public class Entity : MonoBehaviour
             return;
         }
 
-        rb.velocity = new Vector2(_xVelocity, _yVelocity); // 设置速度
-        FlipController(_xVelocity); // 根据速度翻转控制器
+        rb.velocity = new Vector2(_xVelocity, _yVelocity); //速度
+        FlipController(_xVelocity); //根据速度翻转控制器
     }
 
     public virtual void SetZeroVelocity()

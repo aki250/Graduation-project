@@ -16,12 +16,11 @@ public class PlayerStats : CharacterStats
         playerFX = GetComponent<PlayerFX>();
     }
 
-    //在开始时获取Player组件，并存储玩家的默认移动速度
     protected override void Start()
     {
         base.Start();
         player = GetComponent<Player>();
-        playerDefaultMoveSpeed = player.moveSpeed;
+        playerDefaultMoveSpeed = player.moveSpeed;  //默认移速
     }
 
     //玩家攻击目标时的处理
@@ -53,11 +52,13 @@ public class PlayerStats : CharacterStats
     //玩家受到伤害时的处理
     public override void TakeDamage(int _damage, Transform _attacker, Transform _attackee, bool _isCrit)
     {
+
+       // player.stats.BecomeInvincible(true);
         //无敌判断
-        //if (isInvincible)
-        //{
-        //    return;
-        //}
+        if (isInvincible)
+        {
+            return;
+        }
 
         //扣除伤害并返回伤害值
         int takenDamage = DecreaseHPBy(_damage, _isCrit);

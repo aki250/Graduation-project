@@ -25,17 +25,14 @@ public class UI : MonoBehaviour, ISettingsSaveManager
     [SerializeField] private GameObject endText;  //结束文字
     [SerializeField] private GameObject tryAgainButton;  //重试按钮
 
-    //感谢页面
     [Header("感谢游玩")]
     [SerializeField] private GameObject thankYouForPlayingText;
     [SerializeField] private TextMeshProUGUI achievedEndingText; //显示已达成的结局(可扩展结局）
     [SerializeField] private GameObject returnToTitleButton; //返回标题页按钮
 
-    //音频设置
     [Header("声音设置")]
     [SerializeField] private VolumeSlider_UI[] volumeSettings; //音量调节滑块
 
-    //游戏玩法设置
     [Header("游戏设置")]
     [SerializeField] private GameplayOptionToggle_UI[] gameplayToggleSettings; //游戏玩法设置选项（例如开关）
 
@@ -79,7 +76,7 @@ public class UI : MonoBehaviour, ISettingsSaveManager
             OpenMenuByKeyBoard(character_UI);
         }
 
-                                        //B键切换到制作
+                                        //B键切换到制作 
         if (UIKeyFunctioning && Input.GetKeyDown(KeyBindManager.instance.keybindsDictionary["Craft"]))
         {
             OpenMenuByKeyBoard(craft_UI);
@@ -91,13 +88,13 @@ public class UI : MonoBehaviour, ISettingsSaveManager
             OpenMenuByKeyBoard(skillTree_UI);
         }
 
-        // 如果当前显示的 UI 不是 ingame_UI，按下 Esc 键关闭当前 UI 并显示 ingame_UI
-        // 如果是 ingame_UI，按下 Esc 键打开选项 UI
+        //当前显示的UI不是ingame_UI，按Esc键关闭当前UI 并显示ingame_UI
+        //如果是ingame_UI，按下Esc键打开选项UI
         if (UIKeyFunctioning && Input.GetKeyDown(KeyCode.Escape))
         {
             if (currentUI != ingame_UI)
             {
-                // 关闭所有工具提示并切换回游戏界面
+                //关闭所有工具提示并切换回游戏界面
                 skillToolTip.gameObject.SetActive(false);
                 itemToolTip.gameObject.SetActive(false);
                 statToolTip.gameObject.SetActive(false);
@@ -105,7 +102,7 @@ public class UI : MonoBehaviour, ISettingsSaveManager
             }
             else
             {
-                // 打开选项菜单
+                //打开选项菜单
                 OpenMenuByKeyBoard(options_UI);
             }
         }
@@ -113,37 +110,37 @@ public class UI : MonoBehaviour, ISettingsSaveManager
 
     public void SwitchToMenu(GameObject _menu)
     {
-        // 关闭所有的 UI 面板
+        //关闭所有UI面板
         for (int i = 0; i < transform.childCount; i++)
         {
-            // 保留黑色渐隐屏幕（FadeScreen）
+            //保留黑色渐隐屏幕
             bool isFadeScreen = (transform.GetChild(i).GetComponent<FadeScreen_UI>() != null);
 
             if (!isFadeScreen)
             {
-                // 关闭当前 UI 面板
+                //关闭当前UI
                 transform.GetChild(i).gameObject.SetActive(false);
-                currentUI = null; // 重置当前显示的 UI
+                currentUI = null; //重置当前显示UI
             }
         }
 
-        // 设置目标 UI 为激活状态
+        //设置目标UI为激活状态
         if (_menu != null)
         {
-            _menu.SetActive(true); // 激活指定的菜单 UI
-            currentUI = _menu; // 设置当前 UI 为目标菜单
-            AudioManager.instance.PlaySFX(7, null); // 播放切换 UI 时的音效
+            _menu.SetActive(true); //激活指定的菜单 UI
+            currentUI = _menu; //设置当前 UI 为目标菜单
+            AudioManager.instance.PlaySFX(7, null); //播放切换UI的音效
         }
 
         // 如果目标菜单是游戏中的 UI，则恢复游戏进度
         if (_menu == ingame_UI)
         {
-            GameManager.instance?.PauseGame(false); // 恢复游戏
+            GameManager.instance?.PauseGame(false); 
         }
         else
         {
-            // 如果目标菜单不是游戏中的 UI，则暂停游戏
-            GameManager.instance?.PauseGame(true); // 暂停游戏
+            //如果目标菜单不是游戏中的UI，则暂停游戏
+            GameManager.instance?.PauseGame(true); 
         }
     }
 
@@ -164,36 +161,38 @@ public class UI : MonoBehaviour, ISettingsSaveManager
         }
     }
 
+    //
     public Vector2 SetupToolTipPositionOffsetAccordingToMousePosition(float _xOffsetRate_left, float _xOffsetRate_right, float _yOffsetRate_up, float _yOffsetRate_down)
     {
-        Vector2 mousePosition = Input.mousePosition; // 获取鼠标当前位置
+        Vector2 mousePosition = Input.mousePosition; //获取鼠标当前位置
         float _xOffset = 0;
         float _yOffset = 0;
 
-        // 如果鼠标位于屏幕右侧
+        //如果鼠标位于屏幕右侧
         if (mousePosition.x >= Screen.width * 0.5)
         {
-            _xOffset = -Screen.width * _xOffsetRate_left; // 设置左侧偏移量
+            _xOffset = -Screen.width * _xOffsetRate_left; //设置左侧偏移量
         }
-        else // 如果鼠标位于屏幕左侧
+        else //如果鼠标位于屏幕左侧
         {
-            _xOffset = Screen.width * _xOffsetRate_right; // 设置右侧偏移量
+            _xOffset = Screen.width * _xOffsetRate_right; //设置右侧偏移量
         }
 
-        // 如果鼠标位于屏幕上方
+        //如果鼠标位于屏幕上方
         if (mousePosition.y >= Screen.height * 0.5)
         {
-            _yOffset = -Screen.height * _yOffsetRate_down; // 设置下方偏移量
+            _yOffset = -Screen.height * _yOffsetRate_down; //设置下方偏移量
         }
-        else // 如果鼠标位于屏幕下方
+        else //如果鼠标位于屏幕下方
         {
-            _yOffset = Screen.height * _yOffsetRate_up; // 设置上方偏移量
+            _yOffset = Screen.height * _yOffsetRate_up; //设置上方偏移量
         }
 
-        // 返回根据鼠标位置计算的提示框位置偏移量
+        //返回根据鼠标位置计算的提示框位置偏移量
         Vector2 toolTipPositionOffset = new Vector2(_xOffset, _yOffset);
         return toolTipPositionOffset;
     }
+
     public Vector2 SetupToolTipPositionOffsetAccordingToUISlotPosition(Transform _slotUITransform, float _xOffsetRate_left, float _xOffsetRate_right, float _yOffsetRate_up, float _yOffsetRate_down)
     {
         float _xOffset = 0;
@@ -293,7 +292,6 @@ public class UI : MonoBehaviour, ISettingsSaveManager
     public void LoadData(SettingsData _data)
     {
         // 加载音频设置
-        // volumeSettingsDictionary<exposedParameter, value>
         foreach (var search in _data.volumeSettingsDictionary)
         {
             foreach (var volume in volumeSettings)

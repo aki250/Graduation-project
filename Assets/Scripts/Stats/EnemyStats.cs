@@ -51,7 +51,7 @@ public class EnemyStats : CharacterStats
         Destroy(gameObject, 3f);
     }
 
-    //敌人生命值为0时调用
+    //敌人生命值为0
     public void ZeroHP()
     {
         currentHP = 0; //设置当前生命值为0

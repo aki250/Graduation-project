@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
                                 
-                                //强制扣血范围，为了让角色在新手教程加血更直观
+                                         //强制扣血范围，为了让角色在新手教程加血更直观
 public class WoundZone : MapElement
 {
     private bool hasDamagedPlayer = false;  //记录玩家是否已经受到伤害

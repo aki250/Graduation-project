@@ -75,10 +75,10 @@ public class PlayerReleaseBlackholeSkillState : PlayerState
                 }
             }
 
-            // 如果可以退出黑洞技能状态
+            //如果可以退出黑洞技能状态
             if (player.skill.blackhole.CanExitBlackholeSkill())
             {
-                // 切换到空中状态
+                //切换到空中状态
                 player.stateMachine.ChangeState(player.airState);
             }
         }

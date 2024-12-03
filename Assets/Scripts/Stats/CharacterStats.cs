@@ -131,7 +131,7 @@ public class CharacterStats : MonoBehaviour
         //如果角色被点燃，则处理点燃伤害
         if (isIgnited)
         {
-            DealIgniteDamage(); // 执行点燃伤害
+            DealIgniteDamage(); //点燃伤害
         }
     }
 
@@ -173,7 +173,7 @@ public class CharacterStats : MonoBehaviour
         //让目标承受伤害，并传递必要的参数（伤害值、攻击者、目标、是否暴击）
         _targetStats.TakeDamage(_totalDamage, transform, _targetStats.transform, crit);
 
-        //魔法伤害相关函数
+        //魔法伤害
         //DoMagicDamage(_targetStats, transform);
     }
 
@@ -208,7 +208,6 @@ public class CharacterStats : MonoBehaviour
         }
 
         isDead = true;
-        Debug.Log($"{gameObject.name} is Dead");
     }
 
     public virtual void DieFromFalling()
@@ -227,7 +226,6 @@ public class CharacterStats : MonoBehaviour
             onHealthChanged(); //通知血量变化
         }
 
-        // 执行死亡逻辑
         Die();
     }
 

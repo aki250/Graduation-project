@@ -15,7 +15,7 @@ public class PlayerAimSwordState : PlayerState
         base.Enter(); 
 
         // 玩家如果在进入此状态时是奔跑状态，会稍微滑动一段距离
-        stateTimer = 0.1f; // 设置定时器为0.1秒
+        stateTimer = 0.1f; //定时器0.1秒
 
         //显示瞄准点
         player.skill.sword.ShowDots(true);
@@ -38,7 +38,6 @@ public class PlayerAimSwordState : PlayerState
             return;
         }
 
-        //如果定时器小于0（即短暂的滑动后，停止玩家的移动）
         if (stateTimer < 0)
         {
             player.SetZeroVelocity(); //停止玩家的移动速度

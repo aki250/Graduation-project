@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+                                                                //站立检测
 public class SkeletonIdleState : SkeletonGroundedState
 {
     public SkeletonIdleState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, Enemy_Skeleton _enemy) : base(_enemyBase, _stateMachine, _animBoolName, _enemy)
@@ -13,7 +13,7 @@ public class SkeletonIdleState : SkeletonGroundedState
         base.Enter();
 
         AudioManager.instance.StopSFX(14);
-        stateTimer = enemy.patrolStayTime;
+        stateTimer = enemy.patrolStayTime;  //初始化状态计时器，为敌人的巡逻，停留时间
     }
 
     public override void Exit()
@@ -27,7 +27,6 @@ public class SkeletonIdleState : SkeletonGroundedState
     {
         base.Update();
 
-        //if skeleton is already not in idleState, it's not gonna execute the remaining code
         if (stateMachine.currentState != enemy.idleState)
         {
             return;

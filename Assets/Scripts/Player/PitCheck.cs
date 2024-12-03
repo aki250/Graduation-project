@@ -26,10 +26,10 @@ public class PitCheck : MonoBehaviour
         CameraMovementOnPit();  //检查是否处于深坑并调整摄像机缩放
     }
 
-    // 根据玩家是否接近深坑来调整摄像机的正交视图大小（缩放效果）
+    //根据玩家是否接近深坑来调整摄像机的正交视图大小（缩放效果）
     private void CameraMovementOnPit()
     {
-        // 如果玩家接近深坑，逐步增加摄像机的缩放
+        //如果玩家接近深坑，逐步增加摄像机的缩放
         if (player.isNearPit)
         {
             // 如果摄像机的正交大小小于目标大小，则渐变增加

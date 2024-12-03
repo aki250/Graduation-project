@@ -8,35 +8,36 @@ public class GameManager : MonoBehaviour, IGameProgressionSaveManager
     public static GameManager instance;
 
     private Player player;
-
-    [SerializeField] private Checkpoint[] checkpoints;
+    [SerializeField] private Checkpoint[] checkpoints;  //存储游戏中所有Checkpoint对象
     public string lastActivatedCheckpointID { get; set; }
 
-    [Header("Dropped Currency")]
+    [Header("掉落货币")]
     [SerializeField] private GameObject deathBodyPrefab;
     public int droppedCurrencyAmount;
-    [SerializeField] private Vector2 deathPosition;
+    [SerializeField] private Vector2 deathPosition; //记录最后一个被玩家激活的检查点的 ID，通常用于游戏存档或进度保存。
 
-    //public List<ItemObject> pickedUpItemInMapList { get; set; }
-    public List<int> UsedMapElementIDList {  get; set; }
+    public List<int> UsedMapElementIDList { get; set; } 
 
     private void Awake()
     {
         if (instance == null)
         {
-            instance = this;
+            instance = this; 
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject); 
         }
 
+        //获取场景中的所有Checkpoint
         checkpoints = FindObjectsOfType<Checkpoint>();
+
         player = PlayerManager.instance.player;
 
-        //pickedUpItemInMapList = new List<ItemObject>();
+        //初始化已使用地图元素ID的列表
         UsedMapElementIDList = new List<int>();
     }
+
 
     public void RestartScene()
     {
@@ -57,48 +58,62 @@ public class GameManager : MonoBehaviour, IGameProgressionSaveManager
         }
     }
 
+    //寻找最近检查点
     private Checkpoint FindClosestActivatedCheckpoint()
     {
+                            //初始化最短距离为无穷大，表示初始找不到有效检查点
         float closestDistance = Mathf.Infinity;
+        //初始化最靠近的已激活检查点为null
         Checkpoint closestActivatedCheckpoint = null;
 
+        //遍历所有检查点
         foreach (var checkpoint in checkpoints)
         {
+            //计算当前检查点与玩家之间的距离
             float distanceToCheckpoint = Vector2.Distance(player.transform.position, checkpoint.transform.position);
 
+            //如果当前检查点距离玩家更近，并且已被激活
             if (distanceToCheckpoint < closestDistance && checkpoint.activated == true)
             {
+                //更新最短距离
                 closestDistance = distanceToCheckpoint;
+                //更新最近的已激活检查点
                 closestActivatedCheckpoint = checkpoint;
             }
         }
 
+        //返回最靠近的已激活检查点
         return closestActivatedCheckpoint;
     }
 
+    //死亡掉落金币
     private void LoadDroppedCurrency(GameData _data)
     {
+        //加载玩家死亡时掉落货币数量
         droppedCurrencyAmount = _data.droppedCurrencyAmount;
-        deathPosition = _data.deathPosition;
+        deathPosition = _data.deathPosition;    //加载玩家死亡位置
 
+        //掉落，则在死亡位置生成遗体，设置相同掉落货币数量
         if (droppedCurrencyAmount > 0)
         {
             GameObject deathBody = Instantiate(deathBodyPrefab, deathPosition, Quaternion.identity);
             deathBody.GetComponent<DroppedCurrencyController>().droppedCurrency = droppedCurrencyAmount;
         }
 
-        //to prevent from generating a death body on ground
-        //when player is not dead in the last life with some currency left
-        //and chose to save and continue game;
-        droppedCurrencyAmount = 0;
+        droppedCurrencyAmount = 0;  //////////////////////////防止在玩家未死亡时（例如在选择继续游戏时）误生成死亡遗体物体
+        ////////////////////////                                清空掉落的货币数量，因为玩家没有掉落任何货币
     }
 
+    //加载检查点
     private void LoadCheckpoints(GameData _data)
     {
+        //遍历游戏数据 检查点 字典
         foreach (var search in _data.checkpointsDictionary)
         {
+            //遍历检查点
             foreach (var checkpoint in checkpoints)
             {
+                //当前检查点的ID与数据中的匹配，激活检查点
                 if (checkpoint.checkpointID == search.Key && search.Value == true)
                 {
                     checkpoint.ActivateCheckpoint();
@@ -107,6 +122,7 @@ public class GameManager : MonoBehaviour, IGameProgressionSaveManager
         }
     }
 
+    //从游戏数据中加载上次激活的检查点ID
     private void LoadLastActivatedCheckpoint(GameData _data)
     {
         lastActivatedCheckpointID = _data.lastActivatedCheckpointID;
@@ -114,6 +130,7 @@ public class GameManager : MonoBehaviour, IGameProgressionSaveManager
 
     private void SpawnPlayerAtClosestActivatedCheckpoint(GameData _data)
     {
+        //游戏数据中没有最近激活的检查点ID
         if (_data.closestActivatedCheckpointID == null)
         {
             return;
@@ -121,8 +138,10 @@ public class GameManager : MonoBehaviour, IGameProgressionSaveManager
 
         foreach (var checkpoint in checkpoints)
         {
+            //当前检查点的ID与最近激活的检查点ID匹配
             if (_data.closestActivatedCheckpointID == checkpoint.checkpointID)
             {
+                //将玩家的位置设置为该检查点的位置
                 player.transform.position = checkpoint.transform.position;
             }
         }
@@ -132,86 +151,80 @@ public class GameManager : MonoBehaviour, IGameProgressionSaveManager
     {
         if (_data.lastActivatedCheckpointID == null)
         {
+            //游戏数据中没有最后激活的检查点ID，
             return;
         }
 
         foreach (var checkpoint in checkpoints)
         {
+            //当前检查点的ID与上次激活的检查点ID匹配
             if (_data.lastActivatedCheckpointID == checkpoint.checkpointID)
             {
+                //将玩家的位置设置为该检查点的位置
                 player.transform.position = checkpoint.transform.position;
             }
         }
     }
 
+    //从保存的游戏数据中加载已拾取的地图物品ID列表
     private void LoadPickedUpItemInMapIDList(GameData _data)
     {
+        //检查保存的数据中是否包含已使用的地图元素ID列表
         if (_data.UsedMapElementIDList != null)
         {
-            foreach (var seach in _data.UsedMapElementIDList)
+            foreach (var serach in _data.UsedMapElementIDList)
             {
-                UsedMapElementIDList.Add(seach);
+                //每个ID添加到当前的已使用地图元素ID列表中
+                UsedMapElementIDList.Add(serach);
             }
         }
     }
 
 
-    //private void LoadPickedUpItemInMapList(GameData _data)
-    //{
-    //    if (_data.pickedUpItemInMapList != null)
-    //    {
-    //        foreach (var item in _data.pickedUpItemInMapList)
-    //        {
-    //            pickedUpItemInMapList.Add(item);
-    //        }
-    //    }
-    //}
-
     public void LoadData(GameData _data)
     {
+        //加载已丢失的货币数据
         LoadDroppedCurrency(_data);
 
-        //picked up item-in-map will get destoyed automatically in ItemObject script
+        //已拾取的物品信息将由ItemObject自动销毁
         LoadPickedUpItemInMapIDList(_data);
-        //LoadPickedUpItemInMapList(_data);
 
-        //activate all the checkpoints which are saved as activated
+        //激活所有保存为已激活的检查点
         LoadCheckpoints(_data);
 
+        //加载最后激活的检查点 ID
         LoadLastActivatedCheckpoint(_data);
 
-        //player will be spawned at the closest activated checkpoint
-        //SpawnPlayerAtClosestActivatedCheckpoint(_data);
-
-        //player will be spawned at the last activated checkpoint
+        //玩家将在最近激活的检查点处重生
         SpawnPlayerAtLastActivatedCheckpoint(_data);
     }
-
     public void SaveData(ref GameData _data)
     {
-        //saving death position and dropped currency
+        //保存玩家死亡位置和丢失的货币数量
         _data.droppedCurrencyAmount = droppedCurrencyAmount;
         _data.deathPosition = player.transform.position;
 
-
-        //prevent from saving duplicated redundant checkpoint data
+        //清空最近激活的检查点ID
         _data.checkpointsDictionary.Clear();
 
+        //查找最近激活的检查点并保存其ID
         _data.closestActivatedCheckpointID = FindClosestActivatedCheckpoint()?.checkpointID;
 
+        // 遍历所有检查点并保存其激活状态
         foreach (Checkpoint checkpoint in checkpoints)
         {
             _data.checkpointsDictionary.Add(checkpoint.checkpointID, checkpoint.activated);
         }
 
-        //save last activated checkpoint id
+        //保存最后激活的检查点ID
         _data.lastActivatedCheckpointID = lastActivatedCheckpointID;
 
-        //save pciked up item in map list;
+        //清空并保存已使用的地图元素ID列表
         _data.UsedMapElementIDList.Clear();
         foreach (var itemID in UsedMapElementIDList)
         {
             _data.UsedMapElementIDList.Add(itemID);
         }
     }
+
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy_AnimationTrigger : MonoBehaviour
 {
-    //获取父物体上的 Enemy 组件
+    //获取父物体上的Enemy组件
     private Enemy enemy => GetComponentInParent<Enemy>();
 
     //动画触发器，触发敌人的动画事件
@@ -16,7 +16,7 @@ public class Enemy_AnimationTrigger : MonoBehaviour
     //攻击触发器，在动画触发时检查是否有玩家受到攻击
     private void AttackTrigger()
     {
-        // 获取敌人攻击范围内的所有碰撞体
+        //获取敌人攻击范围内的所有碰撞体
         Collider2D[] colliders = Physics2D.OverlapCircleAll(enemy.attackCheck.position, enemy.attackCheckRadius);
 
         //遍历所有碰撞体
@@ -25,7 +25,7 @@ public class Enemy_AnimationTrigger : MonoBehaviour
             //如果碰撞体是玩家
             if (hit.GetComponent<Player>() != null)
             {
-                Player player = hit.GetComponent<Player>();  //获取玩家组件
+                Player player = hit.GetComponent<Player>();
 
                 // 这里可以调用玩家受到伤害的方法
                 //player.Damage(enemy.transform, player.transform);
@@ -54,7 +54,6 @@ public class Enemy_AnimationTrigger : MonoBehaviour
     //关闭反击窗口
     private void CloseCounterAttackWindow()
     {
-        //调用敌人关闭反击窗口的方法
         enemy.CloseCounterAttackWindow();
     }
 }

@@ -18,15 +18,12 @@ public class SkeletonBattleState : EnemyState
     {
         base.Enter();
 
-        //entering battleState will set the default enemy aggressiveTime
-        //To prevent the case where if player approaching enemy from behind
-        //enemy will get stuck in switching between idleState and battleState
+        //进入战斗状态时，设置敌人默认攻击时间。         防止玩家从背后接近敌人时，敌人在空闲状态和战斗状态之间不断切换。
         stateTimer = enemy.aggressiveTime;
 
         player = PlayerManager.instance.player.transform;
 
-        //if player is attacking enemy from behin,
-        //enemy will turn to player's side immediately
+        //玩家从背后攻击敌人，敌人会立即转向玩家的侧面。
         FacePlayer();
 
         if (player.GetComponent<PlayerStats>().isDead)
@@ -55,15 +52,15 @@ public class SkeletonBattleState : EnemyState
 
         //AudioManager.instance.PlaySFX(14, enemy.transform);
 
-        //enemy always faces player in battle state
-        //to prevent enemy from getting stuck in edge of ground
+        //玩家从背后攻击敌人，敌人会立即转向玩家的侧面。
         FacePlayer();
 
         if (enemy.IsPlayerDetected())
         {
-            //If enemy can see player, then it's always in aggreesive mode
+            //看到玩家就切换攻击状态
             stateTimer = enemy.aggressiveTime;
 
+            //攻击距离
             if (enemy.IsPlayerDetected().distance < enemy.attackDistance)
             {
 
@@ -76,9 +73,9 @@ public class SkeletonBattleState : EnemyState
                 }
             }
         }
-        else  //If enemy can't see player, 
+        else  //看不见
         {
-            //If enemy can't see player or player is out of enemy's scan range, enemy will switch back to patrol mode
+                         //满足，玩家超出扫描范围，切回巡逻
             if (stateTimer < 0 || Vector2.Distance(player.transform.position, enemy.transform.position) > enemy.playerScanDistance)
             {
                 stateMachine.ChangeState(enemy.idleState);
@@ -86,9 +83,7 @@ public class SkeletonBattleState : EnemyState
             }
         }
 
-        //this will make enemy move towards player only when player is far from enemy's attack distance
-        //or player is behind enemy
-        //when enemy is close to player it'll be stopped
+        //敌人仅,在玩家远离其攻击范围时,或玩家位于其身后时,才会移动靠近玩。当敌人与玩家距离很近时，敌人将停止移动
         if (enemy.IsPlayerDetected() && Vector2.Distance(enemy.transform.position, player.transform.position) < enemy.attackDistance)
         {
             ChangeToIdleAnimation();
@@ -118,11 +113,9 @@ public class SkeletonBattleState : EnemyState
 
     private bool CanAttack()
     {
-        //skeleton can only attack when it's on ground
+        //骷髅只能在地面上攻击
         if (Time.time - enemy.lastTimeAttacked >= enemy.attackCooldown && !enemy.isKnockbacked && rb.velocity.y <= 0.1f && rb.velocity.y >= -0.1f)
         {
-            //enemy's lastTimeAttacked is set in attackState
-            //enemy's attack frequency will be random
             enemy.attackCooldown = Random.Range(enemy.minAttackCooldown, enemy.maxAttackCooldown);
             return true;
         }

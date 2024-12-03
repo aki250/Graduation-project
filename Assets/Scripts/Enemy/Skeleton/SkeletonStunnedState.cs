@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+                                                                //—£‘ŒºÏ≤‚
 public class SkeletonStunnedState : EnemyState
 {
     private Enemy_Skeleton enemy;

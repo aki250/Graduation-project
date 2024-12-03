@@ -5,19 +5,20 @@ using UnityEngine.UI;
 
 public class ParrySkill : Skill
 {
-    [Header("Parry Unlock Info")]
-    [SerializeField] private SkillTreeSlot_UI parryUnlockButton;
-    public bool parryUnlocked {  get; private set; }
+    [Header("招架技能")]
+    [SerializeField] private SkillTreeSlot_UI parryUnlockButton;  //招架技能解锁按钮
+    public bool parryUnlocked { get; private set; }  //是否解锁了招架技能
 
-    [Header("Parry Recover HP/FP Unlock Info")]
-    [SerializeField] private SkillTreeSlot_UI parryRecoverUnlockButton;
-    public bool parryRecoverUnlocked { get; private set; }
+    [Header("招架恢复HP")]
+    [SerializeField] private SkillTreeSlot_UI parryRecoverUnlockButton;  //招架恢复HP/FP技能解锁按钮
+    public bool parryRecoverUnlocked { get; private set; }  //是否解锁招架恢复技能
     [Range(0f, 1f)]
-    [SerializeField] private float recoverPercentage;
+    [SerializeField] private float recoverPercentage;  //恢复的百分比
 
-    [Header("Parry With Mirage Unlock Info")]
-    [SerializeField] private SkillTreeSlot_UI parryWithMirageUnlockButton;
-    public bool parryWithMirageUnlocked { get; private set; }
+    [Header("带幻影的招架技")]
+    [SerializeField] private SkillTreeSlot_UI parryWithMirageUnlockButton;  //带幻影的招架技能解锁按钮
+    public bool parryWithMirageUnlocked { get; private set; }  //是否解锁了带幻影的招架技能
+
 
     protected override void Start()
     {
@@ -27,35 +28,39 @@ public class ParrySkill : Skill
         parryRecoverUnlockButton.GetComponent<Button>()?.onClick.AddListener(UnlockParryRecover);
         parryWithMirageUnlockButton.GetComponent<Button>()?.onClick.AddListener(UnlockParryWithMirage);
     }
-
     public override void UseSkill()
     {
+        //使用技能时切换到反击状态
         player.stateMachine.ChangeState(player.counterAttackState);
     }
 
     public override bool UseSkillIfAvailable()
     {
-        return base.UseSkillIfAvailable();
+        return base.UseSkillIfAvailable();                      //如果技能可用，执行基础的技能检查
     }
 
+    // 在成功招架后恢复HP
     public void RecoverHPFPInSuccessfulParry()
     {
-        //only did HP cuz FP is not implemented yet
         if (parryRecoverUnlocked == true)
         {
+            //计算恢复的HP量
             int recoverAmount = Mathf.RoundToInt(player.stats.getMaxHP() * recoverPercentage);
-            player.stats.IncreaseHPBy(recoverAmount);
+            player.stats.IncreaseHPBy(recoverAmount);  //增加HP
         }
     }
 
+    //在成功招架后创建幻影
     public void MakeMirageInSuccessfulParry(Vector3 _cloneSpawnPosition)
     {
         if (parryWithMirageUnlocked == true)
         {
+            //创建幻影，延迟0.1秒
             SkillManager.instance.clone.CreateCloneWithDelay(_cloneSpawnPosition, 0.1f);
         }
     }
 
+    //检查从保存数据中是否已解锁技能
     protected override void CheckUnlockFromSave()
     {
         UnlockParry();
@@ -63,7 +68,8 @@ public class ParrySkill : Skill
         UnlockParryWithMirage();
     }
 
-    #region Unlock Skill
+    #region 解锁技能
+    //解锁招架技能
     private void UnlockParry()
     {
         if (parryUnlocked)
@@ -73,10 +79,11 @@ public class ParrySkill : Skill
 
         if (parryUnlockButton.unlocked == true)
         {
-            parryUnlocked = true;
+            parryUnlocked = true;  //标记招架技能已解锁
         }
     }
 
+    //解锁招架恢复技能
     private void UnlockParryRecover()
     {
         if (parryRecoverUnlocked)
@@ -86,10 +93,11 @@ public class ParrySkill : Skill
 
         if (parryRecoverUnlockButton.unlocked == true)
         {
-            parryRecoverUnlocked = true;
+            parryRecoverUnlocked = true;  //标记招架恢复技能已解锁
         }
     }
 
+    //解锁带幻影招架技能
     private void UnlockParryWithMirage()
     {
         if (parryWithMirageUnlocked)
@@ -99,8 +107,9 @@ public class ParrySkill : Skill
 
         if (parryWithMirageUnlockButton.unlocked == true)
         {
-            parryWithMirageUnlocked = true;
+            parryWithMirageUnlocked = true;  //标记带幻影招架技能已解锁
         }
     }
     #endregion
+
 }

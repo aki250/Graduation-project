@@ -13,7 +13,7 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
     //存储字典的值列表
     [SerializeField] private List<TValue> values = new List<TValue>();
 
-    //在序列化之前调用，将字典中的键值对分别保存到 keys 和 values 列表中
+    //在序列化之前调用，将字典中的键值对分别保存到keys和values列表中
     public void OnBeforeSerialize()
     {
         //清空现有keys和values
@@ -38,7 +38,7 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
         if (keys.Count != values.Count)
         {
             //如果不匹配，输出错误信息
-            Debug.Log("Error! \nNumber of keys is not equal to number of values!");
+            Debug.Log("错误! \n key与values不匹配");
         }
 
         //将key和values列表中的数据重新添加到字典中

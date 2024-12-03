@@ -20,20 +20,20 @@ public class GameData
     //存储过的检查点ID和激活状态
     public SerializableDictionary<string, bool> checkpointsDictionary;
 
-    //最近激活的检查点ID
+    //最近激活检查点ID
     public string closestActivatedCheckpointID;
 
-    //最后激活的检查点ID
+    //最后激活检查点ID
     public string lastActivatedCheckpointID;
 
-    [Header("Dropped Currency")]
+    [Header("掉落货币数量")]
     //玩家死亡时掉落的货币数量
     public int droppedCurrencyAmount;
 
     //玩家死亡时的位置
     public Vector2 deathPosition;
 
-    [Header("Map Elements")]
+    [Header("地图元素")]
     //已使用的地图元素ID列表（已探索的区域，已触发的事件等）
     public List<int> UsedMapElementIDList;
 

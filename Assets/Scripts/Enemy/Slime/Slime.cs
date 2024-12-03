@@ -12,7 +12,7 @@ public enum SlimeType
 
 public class Slime : Enemy
 {
-    [Header("Slime specification")]
+    [Header("史莱姆")]
     [SerializeField] private SlimeType slimeType;
     [SerializeField] private int amoutOfSlimeToSpawnAfterDeath;
     [SerializeField] private GameObject slimePrefab;
@@ -54,7 +54,6 @@ public class Slime : Enemy
     {
         base.Update();
 
-        //to prevent counter image from always showing when skeleton's attack got interrupted
         if (stateMachine.currentState != attackState)
         {
             CloseCounterAttackWindow();
@@ -78,7 +77,7 @@ public class Slime : Enemy
 
         stateMachine.ChangeState(deathState);
 
-        //small slime will not spawn any more slimes
+        //不是最小史莱姆则继续生成
         if (slimeType == SlimeType.small)
         {
             return;
@@ -94,18 +93,21 @@ public class Slime : Enemy
         //    return;
         //}
 
-        //player's attack will not interrupt big slime's attack
+        //如果是大史莱姆，且当前状态是战斗状态或攻击状态，则不允许进入战斗状态
+        //大史莱姆的攻击不会被玩家的攻击打断
         if (slimeType == SlimeType.big && (stateMachine.currentState == battleState || stateMachine.currentState == attackState))
         {
-            return;
+            return; 
         }
 
+        // 如果当前状态不是  战斗状态   眩晕状态   死亡状态，       则战斗
         if (stateMachine.currentState != battleState && stateMachine.currentState != stunnedState && stateMachine.currentState != deathState)
         {
-            stateMachine.ChangeState(battleState);
+            stateMachine.ChangeState(battleState); 
         }
     }
 
+    //根据给定数量和预制体，在指定位置生成史莱姆。
     private void SpawnSlime(int _amountOfSlimeToSpawn, GameObject _slimePrefab)
     {
         for (int i = 0; i < _amountOfSlimeToSpawn; i++)
@@ -118,9 +120,7 @@ public class Slime : Enemy
 
     public void SetupSpawnedSlime(int _facingDirection)
     {
-        //if the spawned slime's facing direction
-        //is not equal to its parent's facing direction,
-        //flip it
+        //保证孩子和父亲方向一致
         if (facingDirection != _facingDirection)
         {
             Flip();
@@ -129,11 +129,13 @@ public class Slime : Enemy
         float xVelocity = Random.Range(minSlimeSpawnSpeed.x, maxSlimeSpawnSpeed.x);
         float yVelocity = Random.Range(minSlimeSpawnSpeed.y, maxSlimeSpawnSpeed.y);
 
-        //to prevent the slime spawn speed being interrupted
+        //防止史莱姆生成时的速度，被打断
         isKnockbacked = true;
 
+        //确保史莱姆朝指定方向移动
         GetComponent<Rigidbody2D>().velocity = new Vector2(xVelocity * -facingDirection, yVelocity);
 
+        //防止史莱姆生成时的速度  被打断
         Invoke("CancelKnockback", 1.5f);
     }
 

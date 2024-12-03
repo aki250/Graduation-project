@@ -9,12 +9,11 @@ public class PlayerJumpState : PlayerState
     {
     }
 
-    // 当进入跳跃状态时调用
     public override void Enter()
     {
         base.Enter(); 
 
-        // 设置玩家的水平速度为当前速度，垂直速度为跳跃力
+        //玩家水平速度为当前速度，垂直速度为跳跃力
         player.SetVelocity(rb.velocity.x, player.jumpForce);
     }
 
@@ -32,7 +31,7 @@ public class PlayerJumpState : PlayerState
             return;
         }
 
-        // 如果玩家的垂直速度小于0，即玩家开始下落
+        //玩家的垂直速度小于0，即玩家开始下落
         if (rb.velocity.y < 0)
         {
             stateMachine.ChangeState(player.airState);

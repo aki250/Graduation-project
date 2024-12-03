@@ -6,11 +6,11 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
 {
     public static Inventory instance;
 
-    //存储装备
+    //装备
     public List<InventorySlot> inventorySlotList;
     public Dictionary<ItemData, InventorySlot> inventorySlotDictionary;
 
-    //存材料
+    //材料
     public List<InventorySlot> stashSlotList;
     public Dictionary<ItemData, InventorySlot> stashSlotDictionary;
 
@@ -107,11 +107,6 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.L))
-        //{
-        //    ItemData _itemToRemove = inventorySlotList[inventorySlotList.Count - 1].item;
-        //    RemoveItem(_itemToRemove);
-        //}
     }
 
     //更新所有UI槽的显示
@@ -172,19 +167,20 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
         }
     }
 
+    //装备
     public void EquipItem(ItemData _item)
     {
-        // 将传入的 ItemData 类型的物品转换为 ItemData_Equipment 类型
+        //将传入的ItemData类型物品，转换为ItemData_Equipment类型
         ItemData_Equipment _newEquipmentToEquip = _item as ItemData_Equipment;
 
-        // 创建新的装备槽并为其分配新装备
+        //创建新的装备槽并为其分配新装备
         InventorySlot newEquipmentSlot = new InventorySlot(_newEquipmentToEquip);
 
-        // 声明一个变量存储已装备的旧装备
+        //存储已装备的旧装备
         ItemData_Equipment _oldEquippedEquipment = null;
 
         //遍历字典中的所有已装备装备，查找是否已装备相同类型的装备
-        //这里的 var search 是 KeyValuePair<ItemData_Equipment, InventorySlot> 类型
+        //这里的var search是 KeyValuePair<ItemData_Equipment, InventorySlot> 类型
         foreach (var search in equippedEquipmentSlotDictionary)
         {
             //如果已经装备了相同类型的装备，记录当前的已装备装备
@@ -254,7 +250,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
         if (inventorySlotList.Count >= inventorySlotUI.Length)
         {
             Debug.Log("No more space in inventory");  //输出背包空间已满的提示
-            return false;  //返回false
+            return false;  
         }
 
         //如果背包还有空位，返回 true，表示可以添加装备
@@ -361,7 +357,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
             }
         }
 
-        return equippedEquipment;  //返回匹配的装备，如果没有找到则为 null
+        return equippedEquipment;  //返回匹配的装备，没有找到则为null
     }
 
     //根据需求物品合成新装备
@@ -400,7 +396,7 @@ public class Inventory : MonoBehaviour, IGameProgressionSaveManager
         //遍历移除的材料列表，逐一从库存中移除相应物品
         for (int i = 0; i < materialsToRemove.Count; i++)
         {
-            RemoveItem(materialsToRemove[i].item);  //调用RemoveItem方法移除材料
+            RemoveItem(materialsToRemove[i].item); 
         }
 
         //将新合成的装备添加到背包或库存中

@@ -14,7 +14,7 @@ public class PlayerIdleState : PlayerGroundedState
     {
         base.Enter(); 
 
-        AudioManager.instance.StopSFX(14); //Õ£÷π“Ù–ß£¨±‡∫≈14
+        AudioManager.instance.StopSFX(14);
     }
 
     public override void Exit()

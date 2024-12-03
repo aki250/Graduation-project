@@ -246,7 +246,7 @@ public class EntityFX : MonoBehaviour
         Vector3 generationPosition = new Vector3(_targetTransform.position.x + xOffset, _targetTransform.position.y + yOffset);
         Vector3 generationRotation = new Vector3(0, 0, zRotation);
 
-        // 根据是否暴击选择不同的特效预制件
+        //根据是否暴击选择不同的特效预制件
         GameObject prefab = hitFXPrefab;
         if (_canCrit)
         {

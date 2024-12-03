@@ -30,6 +30,6 @@ public class PlayerDeathState : PlayerState
             return;
         }
 
-        player.SetZeroVelocity(); // 设置玩家速度为零，防止玩家在死亡状态下移动
+        player.SetZeroVelocity(); //设置玩家速度为零，防止玩家在死亡状态下移动
     }
 }

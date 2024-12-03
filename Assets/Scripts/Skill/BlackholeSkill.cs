@@ -29,7 +29,7 @@ public class BlackholeSkill : Skill
     {
         base.Start();
 
-        //为黑洞解锁按钮添加点击事件监听器，点击时调用 UnlockBlackhole 方法
+        //为黑洞解锁按钮添加点击事件监听器
         blackholeUnlockButton.GetComponent<Button>()?.onClick.AddListener(UnlockBlackhole);
     }
 
@@ -49,7 +49,6 @@ public class BlackholeSkill : Skill
         currentBlackholeScript = currentBlackhole.GetComponent<BlackholeSkillController>();
         currentBlackholeScript.SetupBlackholeSkill(maxSize, growSpeed, shrinkSpeed, cloneAttackAmount, cloneAttackCooldown, QTEInputWindow);
 
-        //播放音效
         AudioManager.instance.PlaySFX(3, player.transform);
         AudioManager.instance.PlaySFX(6, player.transform);
     }
@@ -85,7 +84,6 @@ public class BlackholeSkill : Skill
     #region Unlock Skill
     private void UnlockBlackhole()
     {
-        //如果黑洞技能已经解锁，则直接返回
         if (blackholeUnlocked)
         {
             return;

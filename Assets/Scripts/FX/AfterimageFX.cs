@@ -18,7 +18,7 @@ public class AfterimageFX : MonoBehaviour
 
     private void Update()
     {
-        // 计算透明度 (Alpha) 的减少，逐渐使透明度变为 0
+        //透明度减少，逐渐使透明度变为 0
         float alpha = sr.color.a - afterimageColorLosingSpeed * Time.deltaTime;
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, alpha);  //更新SpriteRenderer颜色（透明度变化）
 

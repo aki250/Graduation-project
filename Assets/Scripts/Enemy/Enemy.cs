@@ -74,7 +74,8 @@ public class Enemy : Entity
         base.OnDrawGizmos();
 
         Gizmos.color = Color.yellow;  //设置Gizmos
-        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + attackDistance * facingDirection, transform.position.y));  // 绘制攻击范围线
+        //绘制攻击范围线
+        Gizmos.DrawLine(transform.position, new Vector3(transform.position.x + attackDistance * facingDirection, transform.position.y));  
     }
 
     //检测玩家是否被敌人侦测到

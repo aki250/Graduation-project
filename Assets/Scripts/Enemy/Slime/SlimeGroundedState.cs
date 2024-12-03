@@ -26,11 +26,7 @@ public class SlimeGroundedState : SlimeState
     {
         base.Update();
 
-        //if enemy can see player inside its scan range
-        //or player is behind enemy
-        //but he's too close to the enemy
-        //enemy will hear the player's footsteps
-        //and also enter battleState
+        //敌人在扫描范围内，检测到玩家的脚步声，或者玩家在敌人后方但距离过近，则进入战斗状态。
         if ((enemy.IsPlayerDetected() || Vector2.Distance(player.position, enemy.transform.position) < enemy.playerHearDistance) && !player.GetComponent<PlayerStats>().isDead)
         {
             stateMachine.ChangeState(enemy.battleState);

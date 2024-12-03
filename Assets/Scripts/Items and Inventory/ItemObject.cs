@@ -1,6 +1,6 @@
 using UnityEngine;
 
-                                              //请记得在Unity编辑器中每次创建新物品时使用InventoryManager脚本中的Fill up item data base函数！
+                           //记得在Unity编辑器中，每次创建新物品时，使用InventoryManager脚本中的Fill up item data base函数
 public class ItemObject : MapElement
 {
     [SerializeField] private Rigidbody2D rb;  //用于物品的刚体，用来控制物品掉落的物理效果

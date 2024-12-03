@@ -4,11 +4,11 @@ using UnityEngine;
 public class PlayerItemDrop : ItemDrop
 {
     //玩家掉落的设置
-    [Header("Player's Drop")]
+    [Header("玩家掉落")]
     [SerializeField] private float chanceToDropEquiment; //掉落装备的概率
     [SerializeField] private float chanceToDropMaterials; //掉落材料的概率
 
-    //重写的掉落生成方法
+    //重写掉落生成方法
     public override void GenrateDrop()
     {
         //获取玩家当前装备的物品和背包中的物品列表
@@ -18,7 +18,7 @@ public class PlayerItemDrop : ItemDrop
         List<InventorySlot> currentEquippedEquipment = inventory.GetEquippedEquipmentList();
         List<InventorySlot> EquipmentToLose = new List<InventorySlot>(); //存放将要掉落的装备
 
-        //背包（储藏室）中的物品列表
+        //背包中的物品列表
         List<InventorySlot> currentStash = inventory.GetStashList();
         List<InventorySlot> materialsToLose = new List<InventorySlot>(); //存放将要掉落的材料
 
@@ -42,7 +42,7 @@ public class PlayerItemDrop : ItemDrop
             }
         }
 
-        //对于掉落的装备，执行卸下装备并将装备丢弃
+        //对于掉落的装备，卸下装备并将装备丢弃
         for (int i = 0; i < EquipmentToLose.Count; i++)
         {
             //卸下装备，且不将其重新放回背包

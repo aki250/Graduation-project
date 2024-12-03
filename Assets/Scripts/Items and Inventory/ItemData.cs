@@ -26,7 +26,7 @@ public class ItemData : ScriptableObject
     //物品图标
     public Sprite icon;
 
-    //物品的ID
+    //物品ID
     public string itemID;
 
     //物品掉落几率

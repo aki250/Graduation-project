@@ -23,7 +23,7 @@ public class PlayerFX : EntityFX
 
     [Space]
     [SerializeField] private ParticleSystem dustFX;  //尘土特效
-    [SerializeField] private ParticleSystem downStrikeDustFX;  //下击时的尘土特效
+    [SerializeField] private ParticleSystem downStrikeDustFX;  //下击特效
 
     protected override void Awake()
     {
@@ -57,11 +57,11 @@ public class PlayerFX : EntityFX
             screenShake.m_DefaultVelocity = new Vector3(_shakeDirection.x * player.facingDirection, _shakeDirection.y) * shakeMultiplier;
             screenShake.GenerateImpulse();  //生成震动
             canScreenShake = false;  //禁止再次震动
-            Invoke("EnableScreenShake", 0.05f);  //0.05秒后允许下一次震动
+            Invoke("EnableScreenShake", 0.05f);  //下一次震动
         }
     }
 
-    //启用屏幕震动的条件
+    //屏幕震动条件
     private void EnableScreenShake()
     {
         canScreenShake = true;  //允许屏幕震动

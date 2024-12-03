@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AreaSound : MonoBehaviour
 {
-    //音效索引，用于播放指定区域的音效
+    //播放指定区域的音效
     [SerializeField] private int areaSoundIndex;
 
     //用于保存渐变停止音效的协程，以便在音效恢复时停止该协程

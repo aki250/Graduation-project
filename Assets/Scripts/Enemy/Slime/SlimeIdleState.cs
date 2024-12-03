@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+                                                              //Ê·À³Ä·Õ¾Á¢×´Ì¬£¨´ý»ú°É
 public class SlimeIdleState : SlimeGroundedState
 {
     public SlimeIdleState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, Slime _slime) : base(_enemyBase, _stateMachine, _animBoolName, _slime)
@@ -26,7 +26,6 @@ public class SlimeIdleState : SlimeGroundedState
     {
         base.Update();
 
-        //if enemy is already not in idleState, it's not gonna execute the remaining code
         if (stateMachine.currentState != enemy.idleState)
         {
             return;

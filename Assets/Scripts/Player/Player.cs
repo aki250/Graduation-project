@@ -83,7 +83,7 @@ public class Player : Entity
         deathState = new PlayerDeathState(this, stateMachine, "Death");
     }
 
-    //初始化时设定一些默认值
+    //初始化时设定默认值
     protected override void Start()
     {
         base.Start();
@@ -97,10 +97,8 @@ public class Player : Entity
         defaultDashSpeed = dashSpeed;
     }
 
-    //每帧更新，处理玩家的输入和状态
     protected override void Update()
     {
-        //如果游戏暂停，玩家不会移动
         if (Time.timeScale == 0)
         {
             return;
@@ -115,7 +113,7 @@ public class Player : Entity
             return;
         }
 
-        CheckForDashInput();  //检查是否有冲刺输入
+        CheckForDashInput();  //检查冲刺输入
 
         //按下特定键时使用技能
         if (Input.GetKeyDown(KeyBindManager.instance.keybindsDictionary["Crystal"]) && skill.crystal.crystalUnlocked)

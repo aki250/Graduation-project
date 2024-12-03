@@ -50,7 +50,7 @@ public class FileDataHandler
         }
         catch (Exception e)
         {
-            Debug.Log($"Error: Failed to save data file: \n{fullPath}\n {e.Message}"); //如果保存失败，输出错误信息
+            Debug.Log($"保存文件失败: \n{fullPath}\n {e.Message}"); 
         }
     }
 
@@ -86,7 +86,7 @@ public class FileDataHandler
             }
             catch (Exception e)
             {
-                Debug.Log($"Failed to load game data from:\n{fullPath}\n{e.Message}"); //如果加载失败，输出错误信息
+                Debug.Log($"从这地方加载失败:\n{fullPath}\n{e.Message}"); 
             }
         }
 
@@ -126,7 +126,7 @@ public class FileDataHandler
         }
         catch (Exception e)
         {
-            Debug.Log($"Error: Failed to save data file: \n{fullPath}\n {e.Message}"); //如果保存失败，输出错误信息
+            Debug.Log($"保存失败: \n{fullPath}\n {e.Message}"); 
         }
     }
 
@@ -162,7 +162,7 @@ public class FileDataHandler
             }
             catch (Exception e)
             {
-                Debug.Log($"Failed to load game data from:\n{fullPath}\n{e.Message}"); //如果加载失败，输出错误信息
+                Debug.Log($"加载失败:\n{fullPath}\n{e.Message}");
             }
         }
 

@@ -250,7 +250,6 @@ public class SwordSkill : Skill
         {
             pierceSwordUnlocked = false;
             swordType = SwordType.Regular;
-            //Debug.Log("Pierce Sword Skill has been unlearned.");
             return;
         }
 

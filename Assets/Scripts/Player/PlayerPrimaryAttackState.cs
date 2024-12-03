@@ -19,7 +19,6 @@ public class PlayerPrimaryAttackState : PlayerState
     {
         base.Enter(); 
 
-        //播放音效，编号2
         AudioManager.instance.PlaySFX(2, player.transform);
 
         if (stateMachine.currentState != player.primaryAttackState)
@@ -42,7 +41,7 @@ public class PlayerPrimaryAttackState : PlayerState
         //重新赋值xInput以防止xInput的值没有及时更新导致的错误
         xInput = Input.GetAxisRaw("Horizontal");
 
-        // 如果xInput不为0，则攻击方向与xInput一致
+        //xInput不为0，则攻击方向与xInput一致
         if (xInput != 0)
         {
             attackDirection = xInput;
@@ -59,7 +58,7 @@ public class PlayerPrimaryAttackState : PlayerState
     {
         base.Exit();
 
-        //启动一个协程，使玩家忙碌0.05秒
+        //用协程使玩家忙碌0.05秒
         player.StartCoroutine(player.BusyFor(0.05f));
 
         //组合计数器增加

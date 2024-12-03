@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class MapElement : MonoBehaviour
 {
-    [Header("Map Element Info")]
+    [Header("地图元素")]
     public bool isMapElementThatCannotReuse;
-    [Tooltip("Each map element's ID should be unique!")]
+    [Tooltip("每个地图元素ID都是唯一")]
     public int mapElementID;
 
     protected virtual void Start()

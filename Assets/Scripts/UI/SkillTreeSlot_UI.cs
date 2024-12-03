@@ -70,24 +70,25 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
     }
 
     public void UnlockSkill()
-    {
-        //if (unlocked)
-        //{
-        //    //取消技能
-        //    unlocked = false; //标记为未解锁
-        //    skillImage.color = lockedSkillColor; //更新图标为锁定颜色
-        //    Debug.Log($"技能已取消学习: {skillName}");
+    {   
+        //测试技能使用，正常注销
+        if (unlocked)
+        {
+            //取消技能
+            unlocked = false; //标记为未解锁
+            skillImage.color = lockedSkillColor; //更新图标为锁定颜色
+            Debug.Log($"技能已取消学习: {skillName}");
 
-        //    //如果有前置技能依赖本技能，需要锁定它们
-        //    foreach (var dependentSkill in shouldBeUnlocked)
-        //    {
-        //        if (dependentSkill.unlocked)
-        //        {
-        //            dependentSkill.UnlockSkill(); //递归锁定依赖技能
-        //        }
-        //    }
-        //    return;
-        //}
+            //如果有前置技能依赖本技能，需要锁定它们
+            foreach (var dependentSkill in shouldBeUnlocked)
+            {
+                if (dependentSkill.unlocked)
+                {
+                    dependentSkill.UnlockSkill(); //递归锁定依赖技能
+                }
+            }
+            return;
+        }
 
         //检查前置技能是否已解锁
         for (int i = 0; i < shouldBeUnlocked.Length; i++)
@@ -183,6 +184,7 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         UnlockSkill();
     }
 
+    //加载技能树数据
     public void LoadData(GameData _data)
     {
         //从保存的游戏数据中加载技能树数据
@@ -193,6 +195,7 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
     }
 
+    //保存技能树数据
     public void SaveData(ref GameData _data)
     {
         //将技能的解锁状态保存到游戏数据中

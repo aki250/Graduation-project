@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+                                            //骷髅地图检测
 public class SkeletonGroundedState : EnemyState
 {
     protected Enemy_Skeleton enemy;
@@ -28,12 +28,7 @@ public class SkeletonGroundedState : EnemyState
     public override void Update()
     {
         base.Update();
-
-        //if enemy can see player inside its scan range
-        //or player is behind enemy
-        //but he's too close to the enemy
-        //enemy will hear the player's footsteps
-        //and also enter battleState
+        //看到角色，或在敌人的听觉范围内，且没死，就战斗状态
         if ((enemy.IsPlayerDetected() || Vector2.Distance(player.position, enemy.transform.position) < enemy.playerHearDistance) && !player.GetComponent<PlayerStats>().isDead)
         {
             stateMachine.ChangeState(enemy.battleState);

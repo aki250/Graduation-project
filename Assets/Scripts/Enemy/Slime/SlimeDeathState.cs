@@ -30,7 +30,7 @@ public class SlimeDeathState : SlimeState
     {
         base.Update();
 
-        //enemy is gonna fly up before he dies
+        //·ÉÉý£¡
         if (stateTimer > 0 && canBeFliedUP)
         {
             enemy.SetVelocity(0, 10);

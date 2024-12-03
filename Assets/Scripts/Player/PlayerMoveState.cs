@@ -17,7 +17,7 @@ public class PlayerMoveState : PlayerGroundedState
     {
         base.Exit(); 
 
-        AudioManager.instance.StopSFX(14); //停止音效，编号14
+        AudioManager.instance.StopSFX(14); 
     }
 
     public override void Update()
@@ -29,7 +29,6 @@ public class PlayerMoveState : PlayerGroundedState
             return;
         }
 
-        //播放音效，编号14
         AudioManager.instance.PlaySFX(14, player.transform);
 
         //设置玩家的水平速度，垂直速度保持不变

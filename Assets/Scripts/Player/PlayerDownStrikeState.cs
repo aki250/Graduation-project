@@ -55,7 +55,7 @@ public class PlayerDownStrikeState : PlayerState
             return;
         }
 
-        //玩家先会稍微上升，作为下击的“蓄力”阶段
+        //玩家先会稍微上升，作为下击的蓄力
         if (!fallingStrikeTrigger)
         {
             player.SetVelocity(0, 1.2f);  //玩家上升高度
@@ -72,12 +72,12 @@ public class PlayerDownStrikeState : PlayerState
                 animStopTriggerHasBeenSet = true;  //设置已停止动画标志
             }
 
-            // 当玩家检测到地面时，恢复动画播放
+            //当玩家检测到地面时，恢复动画播放
             if (player.IsGroundDetected())
             {
                 player.anim.speed = 1;  // 恢复动画播放
 
-                // 如果屏幕震动还未设置，则执行屏幕震动和尘土特效
+                //如果屏幕震动还未设置，则执行屏幕震动和尘土特效
                 if (!screenShakeHasBeenSet)
                 {
                     player.fx.ScreenShake(player.fx.shakeDirection_medium);  // 播放屏幕震动特效

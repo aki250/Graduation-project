@@ -7,18 +7,20 @@ using UnityEngine.Localization.Tables;
 
 public class ItemToolTip_UI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI itemNameText;
-    [SerializeField] private TextMeshProUGUI itemTypeText;
-    [SerializeField] private TextMeshProUGUI itemStatInfo;
+    [SerializeField] private TextMeshProUGUI itemNameText;  //物品名称文本框
+    [SerializeField] private TextMeshProUGUI itemTypeText;  //物品类型文本框
+    [SerializeField] private TextMeshProUGUI itemStatInfo;  //物品属性信息文本框
 
     [Range(1, 72)]
-    [SerializeField] private int originalItemNameFontSize;
+    [SerializeField] private int originalItemNameFontSize;      //物品名称原始字体大小
 
     private void Start()
     {
+        //初始化物品名称文本框 的字体大小为原始大小
         itemNameText.fontSize = originalItemNameFontSize;
     }
 
+    //显示物品提示框
     public void ShowToolTip(ItemData_Equipment item)
     {
         if (item == null)
@@ -26,9 +28,11 @@ public class ItemToolTip_UI : MonoBehaviour
             return;
         }
 
+        //设置物品类型和属性信息文本
         itemTypeText.text = item.equipmentType.ToString();
         itemStatInfo.text = item.GetItemStatInfoAndEffectDescription();
 
+        //根据语言选择设置物品名称文本
         if (LanguageManager.instance.localeID == 0)
         {
             itemNameText.text = item.itemName;
@@ -40,7 +44,7 @@ public class ItemToolTip_UI : MonoBehaviour
             itemStatInfo.text = LanguageManager.instance.TranslateItemStatInfoFromEnglishToChinese(itemStatInfo.text);
         }
 
-
+        //根据物品名称长度调整字体大小
         if (itemNameText.text.Length > 12)
         {
             itemNameText.fontSize *= 0.8f;
@@ -50,25 +54,12 @@ public class ItemToolTip_UI : MonoBehaviour
             itemNameText.fontSize = originalItemNameFontSize;
         }
 
+        //显示物品提示框
         gameObject.SetActive(true);
 
-        //Debug.Log(itemNameText.text);
     }
 
-
-    //public string TranslateItemStatInfoFromEnglishToChinese(string _itemStatInfo)
-    //{
-    //    foreach (var search in LanguageManager.instance.EnglishToChineseStatDictionary)
-    //    {
-    //        string stat_English = search.Key;
-
-    //        _itemStatInfo = _itemStatInfo.Replace(stat_English, LanguageManager.instance.EnglishToChineseStatDictionary[stat_English]);
-    //    }
-
-    //    return _itemStatInfo;
-    //}
-
-
+    //隐藏物品提示框
     public void HideToolTip()
     {
         itemNameText.fontSize = originalItemNameFontSize;

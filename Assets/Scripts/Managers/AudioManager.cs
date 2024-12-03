@@ -10,7 +10,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource[] bgm; //背景音乐源
 
     [Space]
-    [SerializeField] private float sfxMinHearableDistance; // 音效可听的最小距离
+    [SerializeField] private float sfxMinHearableDistance; //音效可听的最小距离
 
     public bool playingBGM; //是否正在播放背景音乐
     private int bgmIndex; //当前播放的背景音乐索引

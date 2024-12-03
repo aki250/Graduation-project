@@ -53,18 +53,15 @@ public class CrystalSkill : Skill
     {
         base.Update();
 
+        //减少射击窗口计时器时间
         shootWindowTimer -= Time.deltaTime;
 
-        //if haven't shoot all the ammo in the mag for a while
-        //auto reload the mag
-        //shootWindowTimer = shootWindow; in ShootCrystalGunIfAvailable()
-        //add !reloading to prevent calling coroutine multiple times
-        //when using invoke in the past, the invoke is gonna get called lots of times
-        //because there's gonna be much time in the shootWindowTimer <= 0 && 0 < ammo < magsize state
+        //如果射击窗口计时器到时，并且水晶弹匣还有子弹，且弹匣未满，且当前不在重新加载状态，则重新加载
         if (shootWindowTimer <= 0 && crystalMag.Count > 0 && crystalMag.Count < magSize && !reloading)
         {
-            ReloadCrystalMag();
+            ReloadCrystalMag(); //重新加载水晶弹匣
         }
+
     }
 
     protected override void CheckUnlockFromSave()
