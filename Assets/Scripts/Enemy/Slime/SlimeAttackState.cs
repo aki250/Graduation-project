@@ -35,8 +35,7 @@ public class SlimeAttackState : SlimeState
                 stateTimer = 0;
                 return;
             }
-
-            //enemy.SetVelocity(enemy.battleMoveSpeed * enemy.facingDirection, rb.velocity.y);
+            enemy.SetVelocity(enemy.battleMoveSpeed * enemy.facingDirection, rb.velocity.y);
         }
         else
         {   

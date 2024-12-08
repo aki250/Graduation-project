@@ -15,7 +15,7 @@ public class DeathBringerCastState : DeathBringerState
     {
         base.Enter();
 
-        castAmount = enemy.castAmount;  //设置为，敌人的施法次数
+        castAmount = enemy.castAmount;  //敌人的施法次数
         castTimer = 0.5f;   //初始化计时器
     }
 
@@ -32,7 +32,7 @@ public class DeathBringerCastState : DeathBringerState
 
         castTimer -= Time.deltaTime;
 
-        //只有当死亡使者施放了所有法术后，才能退出施法状态
+        //只有死亡使者施放法术后，才能退出施法状态
         if (CanCast())
         {
             enemy.CastSpell();
@@ -46,7 +46,7 @@ public class DeathBringerCastState : DeathBringerState
 
     private bool CanCast()
     {
-        //次数，时间都满足才能施法
+        //时间都满足才能施法
         if (castAmount >= 0 && castTimer < 0)
         {
             castAmount--;

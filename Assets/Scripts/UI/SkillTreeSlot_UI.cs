@@ -100,7 +100,7 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             }
         }
 
-        // 检查是否有互斥技能已解锁
+        //检查是否有互斥技能已解锁
         for (int i = 0; i < shouldBeLocked.Length; i++)
         {
             if (shouldBeLocked[i].unlocked == true)
@@ -110,15 +110,15 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             }
         }
 
-        // 检查玩家货币支付技能费用
+        //检查玩家货币支付技能费用
         if (PlayerManager.instance.BuyIfAvailable(skillPrice) == false)
         {
             return;
         }
 
-        // 解锁技能
-        unlocked = true; // 标记为已解锁
-        skillImage.color = Color.white; // 更新图标颜色为已解锁
+        //解锁技能
+        unlocked = true; //标记为已解锁
+        skillImage.color = Color.white; //更新图标颜色为已解锁
         Debug.Log($"成功解锁技能: {skillName}");
     }
 
@@ -172,15 +172,16 @@ public class SkillTreeSlot_UI : MonoBehaviour, IPointerEnterHandler, IPointerExi
             ui.skillToolTip.ShowToolTip(skillName_Chinese, completedSkillDescription_Chinese, skillPrice.ToString());
         }
     }
+
+    //鼠标离开技能图标，隐藏技能提示框
     public void OnPointerExit(PointerEventData eventData)
     {
-        //鼠标离开技能图标，隐藏技能提示框
         ui.skillToolTip.HideToolTip();
     }
 
+    //点技能图标，解锁对应技能
     public void OnPointerDown(PointerEventData eventData)
     {
-        //鼠标点击技能图标，解锁该技能
         UnlockSkill();
     }
 

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-                                                              //Ê·À³Ä·Õ¾Á¢×´Ì¬£¨´ý»ú°É
+                                                              //Ê·À³Ä·Õ¾Á¢×´Ì¬
 public class SlimeIdleState : SlimeGroundedState
 {
     public SlimeIdleState(Enemy _enemyBase, EnemyStateMachine _stateMachine, string _animBoolName, Slime _slime) : base(_enemyBase, _stateMachine, _animBoolName, _slime)

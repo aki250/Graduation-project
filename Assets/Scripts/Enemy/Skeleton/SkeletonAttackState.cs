@@ -39,13 +39,12 @@ public class SkeletonAttackState : EnemyState
                 return; 
             }
 
-            // 否则，敌人在攻击的初始阶段会稍微向前移动一小段距离
-            // 这里可以通过修改敌人的速度来实现，设置水平速度为 `enemy.battleMoveSpeed * enemy.facingDirection`
-            // enemy.SetVelocity(enemy.battleMoveSpeed * enemy.facingDirection, rb.velocity.y);
+            //否则，敌人在攻击的初始阶段会稍微向前移动一小段距离,我通过修改敌人的速度来实现
+            enemy.SetVelocity(enemy.battleMoveSpeed * enemy.facingDirection, rb.velocity.y);
         }
         else
         {
-            // 一旦攻击初期时间结束，敌人停止向前移动
+            //攻击初期时间结束，敌人停止向前移动
             enemy.SetVelocity(0, rb.velocity.y);
         }
 

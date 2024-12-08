@@ -61,14 +61,14 @@ public class Skill : MonoBehaviour
             return true;
         }
 
-        // 根据语言设置弹出相应的提示文本
+        //根据语言设置提示文本
         if (LanguageManager.instance.localeID == 0)
         {
-            player.fx.CreatePopUpText("Skill is in cooldown");  //英文提示
+            player.fx.CreatePopUpText("Skill is in cooldown");  //英文
         }
         else if (LanguageManager.instance.localeID == 1)
         {
-            player.fx.CreatePopUpText("技能冷却中！");  //中文提示
+            player.fx.CreatePopUpText("技能冷却中！");  //中文
         }
         return false;
     }

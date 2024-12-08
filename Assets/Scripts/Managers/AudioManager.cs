@@ -126,7 +126,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("BGM Index out of range"); //如果索引超出范围，输出错误信息
+            Debug.Log("BGM超出范围"); 
         }
     }
 
@@ -148,9 +148,9 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    //允许播放音效（由Awake中的延迟调用来启动）
+    //允许播放音效
     public void AllowPlayingSFX()
     {
-        canPlaySFX = true; //设置为允许播放音效
+        canPlaySFX = true; 
     }
 }
