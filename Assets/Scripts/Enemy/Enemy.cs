@@ -123,7 +123,7 @@ public class Enemy : Entity
         FreezeEnemy(false);  //恢复敌人状态
     }
 
-    //冻结敌人时间函数接口
+    //冻结敌人一段时间的函数接口
     public virtual void FreezeEnemyForTime(float _seconds)
     {
         StartCoroutine(FreezeEnemyForTime_Coroutine(_seconds));  //启动协程

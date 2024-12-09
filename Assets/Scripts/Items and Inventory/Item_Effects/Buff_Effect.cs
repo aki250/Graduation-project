@@ -1,6 +1,6 @@
 using UnityEngine;
 
-//允许在Unity编辑器中创建该脚本的实例作为可复用的物品效果
+// 允许在 Unity 编辑器中创建该脚本的实例作为可复用的物品效果
 [CreateAssetMenu(fileName = "Buff Effect", menuName = "Data/Item Effect/Buff Effect")]
 public class Buff_Effect : ItemEffect
 {
@@ -32,8 +32,8 @@ public class Buff_Effect : ItemEffect
     {
         playerStats = PlayerManager.instance.player.GetComponent<PlayerStats>();
 
-        //buffStatType获取需要增加的属性，并应用效果
-        //Buff效果将增加buffValue，并持续buffDuration时间
+        // 根据 buffStatType 获取需要增加的属性，并应用 Buff 效果
+        // Buff 效果将增加 buffValue 数值，并持续 buffDuration 时间
         playerStats.IncreaseStatByTime(playerStats.GetStatByType(buffStatType), buffValue, buffDuration);
     }
 }

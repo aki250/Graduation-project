@@ -50,7 +50,7 @@ public class PitCheck : MonoBehaviour
         }
         else
         {
-            //如果玩家站在平台上，则不影响摄像机的调整
+            // 如果玩家站在平台上，则不影响摄像机的调整
             if (player.isOnPlatform)
             {
                 return;

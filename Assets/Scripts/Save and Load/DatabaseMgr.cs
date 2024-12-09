@@ -278,7 +278,7 @@ public class DatabaseMgr
                     }
                 }
 
-                gameData.isNew = reader.GetInt32("newplayer") == 0 ? false:true;
+               // gameData.isNew = reader.GetInt32("newplayer") == 0 ? false:true;
 
             }
         }
@@ -385,7 +385,7 @@ public class DatabaseMgr
             cmd.Parameters.AddWithValue("dropamount", gd.droppedCurrencyAmount);
             cmd.Parameters.AddWithValue("deathpoint", deathpoint);
             cmd.Parameters.AddWithValue("maplist", maplist);
-            cmd.Parameters.AddWithValue("newplayer", gd.isNew?1:0);
+           //cmd.Parameters.AddWithValue("newplayer", gd.isNew?1:0);
             cmd.ExecuteNonQuery();
             id = (int)cmd.LastInsertedId;
         }

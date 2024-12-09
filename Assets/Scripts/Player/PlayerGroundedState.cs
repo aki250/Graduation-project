@@ -30,7 +30,7 @@ public class PlayerGroundedState : PlayerState
             stateMachine.ChangeState(player.primaryAttackState);
         }
 
-        //如果同时按下W和攻击键，则切换到玩家的空中发射攻击状态
+        //如果同时按下前进键（W）和攻击键，则切换到玩家的空中发射攻击状态
         if (Input.GetKey(KeyCode.W) && Input.GetKeyDown(KeyBindManager.instance.keybindsDictionary["Attack"]))
         {
             stateMachine.ChangeState(player.airLaunchAttackState);

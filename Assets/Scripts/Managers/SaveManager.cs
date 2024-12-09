@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 
 //存档位置  C:\Users\megum\AppData\LocalLow\DefaultCompany\BrandNewRPGGame_2nd
+//The save managers in both game scene and main menu should have the same encrypt option!
 
 public class SaveManager : MonoBehaviour
 {
@@ -20,13 +21,13 @@ public class SaveManager : MonoBehaviour
     //存储所有处理游戏进度保存的管理器
     private List<IGameProgressionSaveManager> gameProgressionSaveManagers;
 
-    //处理游戏数据文件  文件数据处理器
+    //处理游戏数据文件   的文件数据处理器
     private FileDataHandler gameDataHandler;
 
-    //存储所有  设置保存  管理器
+    //存储所有  设置保存   的管理器
     private List<ISettingsSaveManager> settingsSaveManagers;
 
-    //处理  设置数据文件   文件数据处理器
+    //处理  设置数据文件   的文件数据处理器
     private FileDataHandler settingsDataHandler;
 
     private void Awake()
@@ -43,7 +44,7 @@ public class SaveManager : MonoBehaviour
 
     private void Start()
     {
-        //初始化设置数据、游戏数据   的文件处理器
+        //初始化   设置数据、游戏数据   的文件处理器
         settingsDataHandler = new FileDataHandler(Application.persistentDataPath, settingsFileName, encryptData);
         gameDataHandler = new FileDataHandler(Application.persistentDataPath, gameFileName, encryptData);
 
@@ -78,7 +79,16 @@ public class SaveManager : MonoBehaviour
     private void LoadSettings()
     {
         //从数据处理器 加载设置数据
-        settingsData = DatabaseMgr.Instance.QuerySetting();
+        settingsData = settingsDataHandler.LoadSettings();
+
+        //设置数据不存在，使用默认设置
+        if (settingsData == null)
+        {
+            settingsData = new SettingsData();  //创建新的设置对象
+            Debug.Log("没有修改设置，加载默认设置");
+        }
+
+        //settingsData = DatabaseMgr.Instance.QuerySetting();        //SQL
 
         //遍历所有设置 保存管理器并加载数据
         foreach (var saveManager in settingsSaveManagers)
@@ -91,15 +101,21 @@ public class SaveManager : MonoBehaviour
     private void LoadGameProgression()
     {
         //从数据处理器 加载游戏进度数据
-        gameData=DatabaseMgr.Instance.QueryGame();
+        gameData = gameDataHandler.LoadGameProgression();
 
+        //如果没有找到游戏数据，既是新游戏
+        if (gameData == null)
+        {
+            NewGame();  //启动新游戏
+        }
+
+        //gameData = DatabaseMgr.Instance.QueryGame();    //sql
         //遍历所有游戏进度保存管理器并加载数据
         foreach (IGameProgressionSaveManager saveManager in gameProgressionSaveManagers)
         {
             saveManager.LoadData(gameData);  //将游戏数据传给每个进度保存管理器
         }
 
-        //输出加载的货币信息
         Debug.Log($"Loaded currency: {gameData.currecny}");
     }
 
@@ -123,7 +139,9 @@ public class SaveManager : MonoBehaviour
         }
 
         //使用数据处理器将设置数据保存到文件
-        DatabaseMgr.Instance.UpdateSettingsData(settingsData);
+        settingsDataHandler.SaveSettings(settingsData);
+
+        //DatabaseMgr.Instance.UpdateSettingsData(settingsData);  //sql
     }
 
     //保存游戏进度数据
@@ -136,7 +154,9 @@ public class SaveManager : MonoBehaviour
         }
 
         //使用数据处理器将游戏进度数据保存到文件
-        DatabaseMgr.Instance.UpdateGameData(gameData);
+        gameDataHandler.SaveGameProgression(gameData);
+
+        //DatabaseMgr.Instance.UpdateGameData(gameData);  //SQL
 
     }
 
@@ -157,12 +177,12 @@ public class SaveManager : MonoBehaviour
         //使用FindObjectsOfType查找场景中的所有MonoBehaviour对象，并筛选出实现了IGameProgressionSaveManager接口对象
         IEnumerable<IGameProgressionSaveManager> saveManagers = FindObjectsOfType<MonoBehaviour>().OfType<IGameProgressionSaveManager>();
 
-        //将所有找到的IGameProgressionSaveManager对象转换成一个列表并返回
+        // 将所有找到的 IGameProgressionSaveManager 对象转换成一个列表并返回
         return new List<IGameProgressionSaveManager>(saveManagers);
     }
 
     //删除游戏进度的保存文件，清空游戏数据
-    [ContextMenu("删除游戏进度保存文件")]
+    [ContextMenu("删除游戏保存文件")]
     public void DeleteGameProgressionSavedData()
     {
         //创建新的FileDataHandler对象，指向保存游戏数据的路径和文件名
@@ -176,11 +196,17 @@ public class SaveManager : MonoBehaviour
     public bool HasGameSaveData()
     {
         //如果游戏进度数据能够成功加载，则说明存在保存的数据
-        if (!gameData.isNew)
+        if (gameDataHandler.LoadGameProgression() != null)
         {
             return true;
         }
         return false;
+
+        //if (!gameData.isNew)    //SQL
+        //{
+        //    return true;
+        //}
+        //return false;
     }
 
 

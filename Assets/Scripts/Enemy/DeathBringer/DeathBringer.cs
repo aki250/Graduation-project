@@ -88,7 +88,7 @@ public class DeathBringer : Enemy
         return false;
     }
 
-    //Boss死亡
+    //Boss死亡时的处理
     public override void Die()
     {
         base.Die();
@@ -158,7 +158,7 @@ public class DeathBringer : Enemy
         // 如果该位置没有地面或者有障碍物，则需要重新选择位置
         if (!HasGroundBelow() || HasSomethingSurrounded())
         {
-            Debug.Log("需要找到新的传送地点");
+            Debug.Log("Need to find new teleport position");
             FindTeleportPosition();
         }
     }

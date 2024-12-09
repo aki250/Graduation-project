@@ -27,19 +27,18 @@ public class GameData
     public string lastActivatedCheckpointID;
 
     [Header("掉落货币数量")]
-    //玩家死亡时掉落货币数量
+    //玩家死亡时掉落的货币数量
     public int droppedCurrencyAmount;
 
-    //玩家死亡位置
+    //玩家死亡时的位置
     public Vector2 deathPosition;
 
     [Header("地图元素")]
     //已使用的地图元素ID列表（已探索的区域，已触发的事件等）
     public List<int> UsedMapElementIDList;
 
-    public bool isNew;
-
-    //构造函数，初始化所有变量默认值
+    //public bool isNew;    //SQL
+    //构造函数，初始化所有变量的默认值
     public GameData()
     {
         //游戏进度相关
@@ -65,5 +64,7 @@ public class GameData
         //初始化最近和最后激活的检查点ID为空
         closestActivatedCheckpointID = string.Empty;
         lastActivatedCheckpointID = string.Empty;
+
+        //isNew = true; //SQL
     }
 }

@@ -7,7 +7,7 @@ public enum StatType
 {
     strength,   //力量（增加伤害和暴击力量）
     agility,    //敏捷（增加闪避和暴击概率）
-    intelligence,   //智力（增加魔法伤害和魔法抗性）=
+    intelligence,   //智力（增加魔法伤害和魔法抗性）
     vitality,   //体力（增加最大HP）
     damage, //物伤
     critChance, //暴击率
